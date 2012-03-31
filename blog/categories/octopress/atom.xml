@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: octopress | 思考的轨迹]]></title>
+  <link href="http://shanewfx.github.com/blog/categories/octopress/atom.xml" rel="self"/>
+  <link href="http://shanewfx.github.com/"/>
+  <updated>2012-03-31T12:19:27+08:00</updated>
+  <id>http://shanewfx.github.com/</id>
+  <author>
+    <name><![CDATA[Shane]]></name>
+    <email><![CDATA[shanewfx@gmail.com]]></email>
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[如何维护Github上博客]]></title>
+    <link href="http://shanewfx.github.com/blog/2012/02/16/clone-blog-from-github/"/>
+    <updated>2012-02-16T14:59:00+08:00</updated>
+    <id>http://shanewfx.github.com/blog/2012/02/16/clone-blog-from-github</id>
+    <content type="html"><![CDATA[<p>有了自己的独立博客，日常维护得全靠自己了。</p>
+
+<p>有时，我们需要在不同电脑上对自己博客进行维护或者发表博文。</p>
+
+<p>如果要在一台陌生的电脑(如没有安装Git或者Ruby运行环境等)上进行博客维护，这种情况下, 我们除了需要根据<a href="http://shanewfx.github.com/blog/2012/02/16/bulid-blog-by-octopress/">上一篇文章</a>介绍的那样来安装必要的Git和Ruby运行环境，还需要从Github上克隆一份自己博客，以便进行维护。</p>
+
+<!--more-->
+
+
+<p>下面以自己的博客为例，看看如何怎么做。</p>
+
+<h4>从Github上Clone博客</h4>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cd f:
+</span><span class='line'>cd blog
+</span><span class='line'>git clone git@github.com:shanewfx/shanewfx.github.com.git</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<h4>要从克隆下来的博客代码中checkout出"source分支"</h4>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cd shanewfx.github.com
+</span><span class='line'>git checkout source</span></code></pre></td></tr></table></div></figure></notextile></div>
+这一步是必须的，否则会出现问题，看<a href="http://fancyoung.com/blog/octopress-study/">这里</a>。</p>
+
+<h4>要重新设置本地博客与Github Page的关联</h4>
+
+<pre><code>rake setup_github_pages
+</code></pre>
+
+<p>根据提示输入: git@github.com:shanewfx/shanewfx.github.com.git</p>
+
+<p><strong>到这里，如果rake无法使用，说明octopress依赖的工具还没有被安装好，需要从github上clone一份octopress，并参考<a href="http://shanewfx.github.com/blog/2012/02/16/bulid-blog-by-octopress/">上篇</a>文章中安装octopress部分安装所需的工具。</strong></p>
+
+<p><em>上述的设置完成后，除了删除了本地的博客文件夹，否则以后在本地就可以不用再进行设置，对博客的维护直接进行下面的操作即可。不过，在对博客维护前，最好要从Github上获得最新的博客内容，使用下面这个命令即可:</em>
+<code>git pull origin source</code></p>
+
+<h4>对博客进行维护，如修改配置、写博文等</h4>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>rake new_post["test clone from github"]
+</span><span class='line'>rake generate
+</span><span class='line'>rake preview</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<h4>更新博客至Github</h4>
+
+<p><div><script src='https://gist.github.com/1863884.js?file='></script>
+<noscript><pre><code>rake deploy
+git add .
+git commit -am 'test clone'
+git push origin source</code></pre></noscript></div>
+</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[搭Blog 学Git]]></title>
+    <link href="http://shanewfx.github.com/blog/2012/02/16/bulid-blog-by-octopress/"/>
+    <updated>2012-02-16T14:45:00+08:00</updated>
+    <id>http://shanewfx.github.com/blog/2012/02/16/bulid-blog-by-octopress</id>
+    <content type="html"><![CDATA[<p>想要有一个自己的独立博客是很久之前的事。</p>
+
+<p>以前也在其他网站上写过自己的博客，但总觉得用的不顺手，感觉少了归属感，最主要是提供的界面感觉都不怎么好。</p>
+
+<p>最近想学学<strong>Git</strong>，知道了<strong>Github</strong>，开始以为就是个代码仓库，后来才发现还提供了page服务，可以用来在上面搭建自己的<strong>独立博客</strong>。</p>
+
+<p>在Github上搭建博客可以利用<a href="https://github.com/mojombo/jekyll/wiki">Jekyll</a>或者<a href="http://octopress.org/">Octopress</a>，Octopress是在Jekyll上建立起来的，即使没有网站设计经验的人也能够快速搭建起自己的博客。</p>
+
+<p>Jekyll和Octopress都是利用<strong>Ruby</strong>实现的，因此在搭建自己博客的过程中难免要接触到一些Ruby的东西，嗯，这说不定也是一个让自己开始了解Ruby的契机。</p>
+
+<p>整个博客的内容和设置都是通过Git进行版本管理的，其中当然需要了解一些基本的Git操作，其实也没有几个常用的命令。</p>
+
+<!--more-->
+
+
+<p>由于我平时的工作环境都是在Windows上，所以这次搭建博客也在Windows上完成的(我使用的OS是Windows XP)。</p>
+
+<p>下面是我用Octopress搭建博客的过程:</p>
+
+<h2>安装和设置Git</h2>
+
+<p>下载<a href="http://code.google.com/p/msysgit/">Git for Windows</a>，安装完成后就可以在本地使用Git了，但要将内容放到Github上，必须先在Github上注册个账户，然后在本机使用Git创建SSH Key。</p>
+
+<p>在Git Bash上输入命令:</p>
+
+<pre><code>ssh-keygen -C "username@email.com" -t rsa
+</code></pre>
+
+<p>Note: username@email.com需要更换成你自己的在Github上注册的Email地址</p>
+
+<p>这样会在用户目录(C:\Documents and Settings\UserName)下产生一个.ssh文件夹，里面为对应的SSH Keys，其中id_rsa.pub是Github需要的SSH公钥文件。</p>
+
+<p>在Github的Account Settings里选择SSH Keys，在其中将id_rsa.pub文件里内容拷贝至
+其中的Key里。</p>
+
+<p>这样以后就可以直接使用Git和GitHub了。</p>
+
+<h2>安装Ruby环境</h2>
+
+<p>下载<a href="http://rubyforge.org/frs/?group_id=167">RubyInstaller</a>和<a href="https://github.com/oneclick/rubyinstaller/downloads/">DevKit</a>。</p>
+
+<p>Octopress需要的Ruby版本为1.9.2，所以选rubyinstaller-1.9.2-p290.exe，DevKit-tdm-32-4.5.2-20111229-1559-sfx.exe。</p>
+
+<p>先安装RubyInstaller，然后解压缩DevKit(路径中不能有中文)。</p>
+
+<p>在"Start Command Prompt with Ruby"命令行中进入DevKit解压缩的目录，然后运行以下命令:</p>
+
+<pre><code>ruby dk.rb init
+ruby dk.rb install
+gem install rdiscount --platform=ruby
+</code></pre>
+
+<p>如果安装成功，就可以使用一些Ruby的工具了，也为后面搭建博客提供了基础环境。</p>
+
+<h2>安装Octopress</h2>
+
+<p>先通过Git从Github上克隆一份Octopress</p>
+
+<pre><code>git clone git://github.com/imathis/octopress.git octopress
+</code></pre>
+
+<p>然后安装一些依赖的工具</p>
+
+<pre><code>cd octopress
+ruby --version # Should report Ruby 1.9.2
+gem install bundler
+bundle install
+</code></pre>
+
+<p>安装Octopress默认的Theme</p>
+
+<pre><code>rake install
+</code></pre>
+
+<h2>配置Octopress</h2>
+
+<p>通过修改_config.yml来配置博客，具体可以在<a href="https://github.com/shanewfx/shanewfx.github.com">我的Github</a>上查看具体的配置内容。</p>
+
+<h2>开始写博文</h2>
+
+<p>通过<code>rake new_post["title"]</code>来在<strong>source/_post</strong>下创建一个新的Post，文件名如下面的格式:<strong>2012-02-16-title.markdown</strong>。</p>
+
+<p>然后可以用VIM打开该文件，并在其中输入/编辑文章内容。</p>
+
+<p>写文章时，可以使用<a href="http://daringfireball.net/projects/markdown/">Markdown</a>和<a href="http://octopress.org/docs/blogging/plugins/">Octopress Plugins</a>来对内容进行格式排版。</p>
+
+<h2>预览效果</h2>
+
+<p>在修改设置或者写完文章后，想看看具体效果，可以通过如下命令来完成:</p>
+
+<pre><code>rake generate
+rake preview
+</code></pre>
+
+<p>然后在浏览器中打开http://localhost:4000/来看一看效果。</p>
+
+<h2>将博客部署到Github上</h2>
+
+<p>在预览的效果符合自己的预期后，就可以通过如下命令将内容部署到Github上了。</p>
+
+<p>第一次部署前需要先要在Github上创建一个<strong>username.github.com</strong>的repository，
+然后通过<code>rake setup_github_pages</code>将自己的Blog与上述的repository关联起来。
+在其过程中根据提示输入<strong>username.github.com</strong>。</p>
+
+<p>然后就可以通过下面的命令来部署自己的博客内容至Github了:</p>
+
+<pre><code>rake deploy
+git status
+git add .
+git commit -a -m 'comment'
+git push origin source
+</code></pre>
+
+<h2>开始浏览自己的博客</h2>
+
+<p>在浏览器的地址栏中输入<strong>username.github.com</strong>，打开的网站就是自己的博客了，此刻一个独立博客就如此问世了!</p>
+
+<p>以后就可以享受这种以Geek方式来写博客的生活了!</p>
+]]></content>
+  </entry>
+  
+</feed>

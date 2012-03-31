@@ -1,0 +1,417 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Compile Boost v1.49.0 - 思考的轨迹</title>
+  <meta name="author" content="Shane">
+
+  
+  <meta name="description" content="对C++程序员来说，Boost是一个非常有名的库，里面提供了很多强大的功能。 不过，我之前一直没有使用和研究过Boost，最近看一些开源的代码中有使用Boost，感觉很不错，于是，今天抽一点时间先将Boost的使用环境先搭起来，后面慢慢学习。 编译Boost &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://shanewfx.github.com/blog/2012/03/17/compile-boost-v1-dot-49-dot-0">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="思考的轨迹" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-29234594-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">思考的轨迹</a></h1>
+  
+    <h2>.....人若无名 专心练剑.....</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:shanewfx.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">博客</a></li>
+  <li><a href="/blog/archives">文章列表</a></li>
+  <li><a href="/books">读书</a></li>
+  <li><a href="/about">关于我</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Compile Boost v1.49.0</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-03-17T21:15:00+08:00" pubdate data-updated="true">Mar 17<span>th</span>, 2012</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>对C++程序员来说，Boost是一个非常有名的库，里面提供了很多强大的功能。</p>
+
+<p>不过，我之前一直没有使用和研究过Boost，最近看一些开源的代码中有使用Boost，感觉很不错，于是，今天抽一点时间先将Boost的使用环境先搭起来，后面慢慢学习。</p>
+
+<!--more-->
+
+
+<h2>编译Boost</h2>
+
+<ul>
+<li><p>先到<a href="http://www.boost.org/">Boost的官方网站</a>上下载最新的版本Boost v1.49.0, 我选择的是<a href="http://sourceforge.net/projects/boost/files/boost/1.49.0/">boost_1_49_0.7z</a>;</p></li>
+<li><p>将下载的boost_1_49_0.7z解压缩到D:\Program Files\boost_1_49_0中;</p></li>
+<li><p>为了自动编译Boost，编写了下面的Batch，将Batch代码拷贝到文本文件中，重新命名为为compile_boost_1_49_0.bat;</p></li>
+</ul>
+
+
+<div><script src='https://gist.github.com/2058696.js?file='></script>
+<noscript><pre><code>em @echo off
+
+rem 先编译bjam
+start bootstrap.bat
+
+rem 等待一分钟待bjam编译完成（如果电脑性能过差，可以设置等待时间更长一些）
+SET SLEEP=ping 127.0.0.1 -n
+%SLEEP% 60 &gt; nul
+
+rem 利用bjam编译boost库
+rem 在此，我们编译vs2005下的x86及x64共2类boost库文件
+
+rem 建立库文件夹
+rem vs2005 win32库文件夹
+md stage\lib\win32\vs8_0\
+
+rem vs2005 x64库文件夹
+md stage\lib\x64\vs8_0\
+
+
+rem ******************************************************************
+rem 先删除lib下所有文件（不删除文件夹）
+del stage\lib\*.* /Q
+
+rem 编译vs2005 win32库文件
+bjam --toolset=msvc-8.0 architecture=x86 --build-type=complete stage
+
+rem 拷贝至\stage\lib\win32\vs8_0
+copy stage\lib\*.* stage\lib\win32\vs8_0\*.* /Y
+rem ##################################################################
+
+rem ******************************************************************
+rem 先删除lib下所有文件（不删除文件夹）
+del stage\lib\*.* /Q
+
+rem 编译vs2008 x64库文件
+bjam --toolset=msvc-8.0 architecture=x86 address-model=64 --build-type=complete stage
+
+rem 拷贝至\stage\lib\x64\vs8_0
+copy stage\lib\*.* stage\lib\x64\vs8_0\*.* /Y
+rem ##################################################################
+
+rem 删除lib下所有文件（不删除文件夹）
+del stage\lib\*.* /Q</code></pre></noscript></div>
+
+
+<p>由于我使用的VS2005，所以使用了<code>--toolset=msvc-8.0</code>。</p>
+
+<p>如果使用的是其他版本的VS，则上述的代码要作一点小修改，具体就是：</p>
+
+<p>VS2008 -> <code>--toolset=msvc-9.0</code>     VS2010 -> <code>--toolset=msvc-10.0</code></p>
+
+<p>当然，lib的存放的路径也可以改动一下。</p>
+
+<ul>
+<li><p>将上面的compile_boost_1_49_0.bat文件拷贝到D:\Program Files\boost_1_49_0目录中;</p></li>
+<li><p>双击运行compile_boost_1_49_0.bat，这样就开始了漫长的自动编译过程，整个过程大概要2小时（编译了32位和64位的全部lib）;</p></li>
+<li><p>编译结束后，生成的Libs都在D:\Program Files\boost_1_49_0\stage\lib\win32\vs8_0和D:\Program Files\boost_1_49_0\stage\lib\x64\vs8_0两个文件夹下；</p></li>
+</ul>
+
+
+<p>到这里Boost编译的过程就结束了。</p>
+
+<h2>设置VS2005</h2>
+
+<ul>
+<li><p>在Tools->Options->Projects and Solutions->VC++ Directories中：</p>
+
+<pre><code>- Win32平台加入Include files和Library files的路径
+    - Include files: D:\Program Files\boost_1_49_0
+    - Library files: D:\Program Files\boost_1_49_0\stage\lib\win32\vs8_0
+
+- X64平台加入Include files和Library files的路径
+    - Include files: D:\Program Files\boost_1_49_0
+    - Library files: D:\Program Files\boost_1_49_0\stage\lib\x64\vs8_0
+</code></pre></li>
+<li><p>通过上述的设置，在VS2005中就可以正常使用Boost了。</p></li>
+</ul>
+
+
+<p><strong>相信此时你一定很激动，赶紧写个测试程序，来体验一下Boost的强大功能吧!</strong></p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Shane</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-03-17T21:15:00+08:00" pubdate data-updated="true">Mar 17<span>th</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/boost/'>Boost</a>, <a class='category' href='/blog/categories/c-/'>C++</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://shanewfx.github.com/blog/2012/03/17/compile-boost-v1-dot-49-dot-0/" data-via="" data-counturl="http://shanewfx.github.com/blog/2012/03/17/compile-boost-v1-dot-49-dot-0/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2012/03/07/isdb-t-slash-sbtvd-t-closed-caption/" title="Previous Post: ARIB Closed Caption">&laquo; ARIB Closed Caption</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2012/03/18/64bit-programming/" title="next Post: VS2005下的64位编程与移植">VS2005下的64位编程与移植 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>About Me</h1>
+  <p><img src="/images/blogImgs/about.jpg"></p>
+  <p>C++程序员，在Windows上搞音视频开发4年有余</p>
+  <p>爱电子产品，爱Google, 爱折腾</p> 
+  <p>喜欢开源的东西, 喜欢读书和思考, 喜欢做一些geek的事情/东西</p>
+  <p>Gmail: shanewfx[at]gmail.com </p>
+</section>
+<section>
+  <h1>Sina围脖</h1>
+  <iframe width="100%" height="75" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=75&fansRow=2&ptype=1&speed=0&skin=1&isTitle=0&noborder=0&isWeibo=0&isFans=0&uid=1684299551&verifier=e30813de&dpc=1"></iframe>
+</section>
+
+
+<section>
+  <h1>Github Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/shanewfx">@shanewfx</a> on Github
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'shanewfx',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+<section>
+  <h1>最新文章</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/03/26/vs2005-64bit-programming/">VS2005 64-bit Programming Note</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/03/18/a-simple-log-tool/">A Simple Log Tool</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/03/18/64bit-programming/">VS2005下的64位编程与移植</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/03/17/compile-boost-v1-dot-49-dot-0/">Compile Boost v1.49.0</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/03/07/isdb-t-slash-sbtvd-t-closed-caption/">ARIB Closed Caption</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>最新评论</h1>
+  <script type="text/javascript" src="http://shanewfx.disqus.com/recent_comments_widget.js?num_items=5&hide_avatars=0&avatar_size=32&excerpt_length=200"></script>
+</section>
+<section>
+  <h1>Tag Cloud</h1>
+    <span id="tag-cloud"><a href='/blog/categories/boost' style='font-size: 115.0%'>Boost(1)</a> <a href='/blog/categories/c-' style='font-size: 160.0%'>C++(4)</a> <a href='/blog/categories/closed-caption' style='font-size: 115.0%'>Closed caption(1)</a> <a href='/blog/categories/dtvcc' style='font-size: 115.0%'>Dtvcc(1)</a> <a href='/blog/categories/git' style='font-size: 115.0%'>Git(1)</a> <a href='/blog/categories/log' style='font-size: 115.0%'>Log(1)</a> <a href='/blog/categories/markdown' style='font-size: 115.0%'>Markdown(1)</a> <a href='/blog/categories/octopress' style='font-size: 130.0%'>Octopress(2)</a> <a href='/blog/categories/vs2005' style='font-size: 115.0%'>Vs2005(1)</a> <a href='/blog/categories/x64' style='font-size: 130.0%'>X64(2)</a> </span>
+</section>
+<section>
+  <h1>大牛博客</h1>
+  <ul>
+    <li>
+      <a href="http://coolshell.cn/">酷壳CoolShell</a>
+    </li>
+    <li>
+      <a href="http://mindhacks.cn/">刘未鹏MIND HACKS</a>
+    </li>
+    <li>
+      <a href="http://blog.codingnow.com/">云风</a>
+    </li>
+  </ul>
+</section>
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Shane -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'shanewfx';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://shanewfx.github.com/blog/2012/03/17/compile-boost-v1-dot-49-dot-0/';
+        var disqus_url = 'http://shanewfx.github.com/blog/2012/03/17/compile-boost-v1-dot-49-dot-0/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
