@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>A Simple Log Tool - 思考的轨迹</title>
+  <title>x64 filter移植笔记 - 思考的轨迹</title>
   <meta name="author" content="Shane">
 
   
-  <meta name="description" content="对于程序员来说，debug是再正常不过的事。 在遇到问题时，通过分析程序的产生的Log文件来查找和验证问题发生的原因。 下面是一个简单的log tool，可以满足一般的log需求。 代码已经放到Github上了，需要的可到这里下载。 该log tool实现了log分级，也支持自己指定log &hellip;">
+  <meta name="description" content="64位filter开发工具为VS2005，原来使用VC6开发的filter要转换到VS2005下。 32位的filter移植到x64平台上，对于没有汇编的filter，工作比较简单，主要就是编译选项的设置和修改指针与整形数相互强制转换的地方，以及部分数据类型不匹配等。 x64编译选项 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://shanewfx.github.com/blog/2012/03/18/a-simple-log-tool">
+  <link rel="canonical" href="http://shanewfx.github.com/blog/2012/04/11/x64-filter-porting">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -81,7 +81,7 @@
   
   <header>
     
-      <h1 class="entry-title">A Simple Log Tool</h1>
+      <h1 class="entry-title">X64 Filter移植笔记</h1>
     
     
       <p class="meta">
@@ -97,7 +97,7 @@
   
 
 
-<time datetime="2012-03-18T20:10:00+08:00" pubdate data-updated="true">Mar 18<span>th</span>, 2012</time>
+<time datetime="2012-04-11T17:53:00+08:00" pubdate data-updated="true">Apr 11<span>th</span>, 2012</time>
         
          | <a href="#disqus_thread">Comments</a>
         
@@ -106,130 +106,44 @@
   </header>
 
 
-<div class="entry-content"><p>对于程序员来说，debug是再正常不过的事。</p>
+<div class="entry-content"><p>64位filter开发工具为VS2005，原来使用VC6开发的filter要转换到VS2005下。</p>
 
-<p>在遇到问题时，通过分析程序的产生的Log文件来查找和验证问题发生的原因。</p>
-
-<p>下面是一个简单的log tool，可以满足一般的log需求。</p>
-
-<p>代码已经放到Github上了，需要的可到<a href="https://github.com/shanewfx/Log">这里</a>下载。</p>
+<p>32位的filter移植到x64平台上，对于没有汇编的filter，工作比较简单，主要就是编译选项的设置和修改指针与整形数相互强制转换的地方，以及部分数据类型不匹配等。</p>
 
 <!--more-->
 
 
-<p>该log tool实现了log分级，也支持自己指定log file的存放位置，缺省情况下，log文件为<code>C:\DebugInfo.log</code>。</p>
+<h3>x64编译选项</h3>
 
-<p>因为log没有加锁，所以在多线程下产生的log会有错乱的现象，因此，在多线程中，可以在Log()函数的开始处加锁来解决。</p>
+<p>对于从VC6转换到VS2005的Project，其中x64编译选项主要注意以下几个地方：</p>
 
-<hr />
-
-<h3>log.h</h3>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-<span class='line-number'>50</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>#ifndef _LOG_H
-</span><span class='line'>#define _LOG_H
-</span><span class='line'>
-</span><span class='line'>#include &lt;string>
-</span><span class='line'>
-</span><span class='line'>#define TEST
-</span><span class='line'>#define LOG_FILE_PATH "C:\\DebugInfo.log"
-</span><span class='line'>
-</span><span class='line'>#ifdef TEST
-</span><span class='line'>  #define LogData Logger::Instance().Log
-</span><span class='line'>  #define SetLogFile Logger::SetLogFilePath
-</span><span class='line'>#else
-</span><span class='line'>  #define LogData
-</span><span class='line'>  #define SetLogFile
-</span><span class='line'>#endif
-</span><span class='line'>
-</span><span class='line'>typedef enum tagLogLevel
-</span><span class='line'>{
-</span><span class='line'>  LOG_TRACE,
-</span><span class='line'>  LOG_INFO,
-</span><span class='line'>  LOG_WARNING,
-</span><span class='line'>  LOG_ERROR,
-</span><span class='line'>  LOG_FATAL,
-</span><span class='line'>  LOG_NONE = 10,
-</span><span class='line'>}LogLevel;
-</span><span class='line'>
-</span><span class='line'>class Logger
-</span><span class='line'>{
-</span><span class='line'>public:
-</span><span class='line'>  static Logger& Instance();
-</span><span class='line'>
-</span><span class='line'>  static void SetLogFilePath(const std::string& strFilePath, bool bAppend = false);
-</span><span class='line'>  static void SetLogLevel(const LogLevel Level);
-</span><span class='line'>  static void Initialise(bool bAppend = false);
-</span><span class='line'>  static void Dispose();
-</span><span class='line'>
-</span><span class='line'>  void Log(const LogLevel Level, const char *Format, ...);
-</span><span class='line'>
-</span><span class='line'>private:
-</span><span class='line'>  Logger();
-</span><span class='line'>  Logger(Logger const&);
-</span><span class='line'>  Logger& operator=(Logger const&);
-</span><span class='line'>  ~Logger();
-</span><span class='line'>
-</span><span class='line'>  static FILE*        m_hLogFile;
-</span><span class='line'>  static std::string  m_strFilePath;
-</span><span class='line'>  static LogLevel     m_LogLevel;
-</span><span class='line'>};
-</span><span class='line'>
-</span><span class='line'>#endif//_LOG_H</span></code></pre></td></tr></table></div></figure>
+<ul>
+<li><p>C/C++->Preprocessor->Preprocessor Definitions : 检查或移除、添加编译器预定义常量；</p></li>
+<li><p>C/C++->Code Generation->Runtime Library : 对于Release版本这里可能选择Multi-threaded(/MT)或者Multi-threaded DLL(/MD)，如果选择Multi-threaded(/MT)，如果编译报错则在Linker->Input->Addtional Dependencies中要增加MSVCRT.LIB；</p></li>
+<li><p>Linker->Input->Addtional Dependencies : 至少包括 strmbase.lib strmiids.lib winmm.lib，其中 strmbase.lib根据编译环境的不同可能为ustrmbase.lib,  strmbasd.lib或 ustrmbasd.lib；</p></li>
+<li><p>Linker->Input->Ignore All Default Libraries : 要选择No，否则编译可能会报错；</p></li>
+<li><p>Linker->Advanced->Entry Point : 如果填的是DllEntryPointer@12，则编译器会报错，win32下则不会报错；在x64下通常不要填；</p></li>
+<li><p>Linker->Advanced->Base Address : 在x64下不要填，win32下如果Linker->Advanced->Entry Point填了DllEntryPointer@12，则这里通常设为0x1c400000；</p></li>
+</ul>
 
 
-<hr />
+<h3>指针与回调函数</h3>
 
-<h3>log.cpp</h3>
+<p>指针部分重点是要检查使用回调函数的地方，在Win32下，指针和int/long转换是可以的，因为都是32位长度，而在x64下，指针的长度为64位，而int/long仍是32位，这样原有的转换在x64下就会出现问题。在这些地方，要将int/long替换为ULONG_PTR，ULONG_PTR在Win32下为32位，而在x64下则为64位。</p>
+
+<h3>数据类型warnings</h3>
+
+<p>不对编译器报出的关于数据类型不匹配的Warnings，要检查并确认不会发生溢出或者截断，没有改变原有的值的情况下可以不用修改。当然，最好Coding的过程中就要避免数据类型可能存在的不匹配问题，否则出现问题时，查找原有就会麻烦了。</p>
+
+<h3>汇编代码的修改</h3>
+
+<p>对于有汇编的filter，移植64位版本，除了上述的问题，还涉及汇编代码的修改。</p>
+
+<p>在VS2005 x64中不再支持内联汇编，编译器不再认识__asm关键字。</p>
+
+<p>所以，对于内联汇编的代码，要将函数提取到单独的.asm文件中，并修改函数参数传递、局部变量的分配及堆栈、寄存器管理。这部分可参看<a href="http://shanewfx.github.com/blog/2012/03/26/vs2005-64bit-programming/">上篇</a>内容。</p>
+
+<p>下面是ARGB转AYUV的一部分x64汇编代码示例：</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -318,124 +232,132 @@
 <span class='line-number'>85</span>
 <span class='line-number'>86</span>
 <span class='line-number'>87</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>#include "log.h"
-</span><span class='line'>#include &lt;stdarg.h>
-</span><span class='line'>#include &lt;windows.h>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+<span class='line-number'>92</span>
+<span class='line-number'>93</span>
+<span class='line-number'>94</span>
+<span class='line-number'>95</span>
+<span class='line-number'>96</span>
+<span class='line-number'>97</span>
+<span class='line-number'>98</span>
+<span class='line-number'>99</span>
+<span class='line-number'>100</span>
+<span class='line-number'>101</span>
+<span class='line-number'>102</span>
+<span class='line-number'>103</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>; extern "C" void ARGB2AYUV(BYTE* pDest, BYTE* pSrc, LONG lWidth, LONG lHeight, LONG lStride)
+</span><span class='line'>; X64 assembly version
 </span><span class='line'>
-</span><span class='line'>FILE* Logger::m_hLogFile = NULL;
-</span><span class='line'>LogLevel Logger::m_LogLevel = LOG_TRACE;
-</span><span class='line'>std::string Logger::m_strFilePath = LOG_FILE_PATH;
-</span><span class='line'>
-</span><span class='line'>const char* LogLevelStr[] = {
-</span><span class='line'>    "TRACE",
-</span><span class='line'>    "INFO",
-</span><span class='line'>    "WARNING",
-</span><span class='line'>    "ERROR",
-</span><span class='line'>    "CRITICAL",
-</span><span class='line'>    "FATAL",
-</span><span class='line'>};
-</span><span class='line'>
-</span><span class='line'>Logger& Logger::Instance() 
-</span><span class='line'>{
-</span><span class='line'>  static Logger LoggerInstance;
-</span><span class='line'>  return LoggerInstance;
-</span><span class='line'>}
-</span><span class='line'>
-</span><span class='line'>void Logger::SetLogFilePath(const std::string& strFilePath, bool bAppend)
-</span><span class='line'>{
-</span><span class='line'>  m_strFilePath = strFilePath;
-</span><span class='line'>  Dispose();
-</span><span class='line'>  Initialise(bAppend);
-</span><span class='line'>}
-</span><span class='line'>
-</span><span class='line'>void Logger::SetLogLevel(const LogLevel Level)
-</span><span class='line'>{
-</span><span class='line'>  m_LogLevel = Level;
-</span><span class='line'>}
+</span><span class='line'>.data
+</span><span class='line'>ALIGN 16
+</span><span class='line'>mask0000ffff   DQ    000000000ffffffffH, 000000000ffffffffH
+</span><span class='line'>YbYgYrYa       DW    3736, 19235, 9798, 0, 3736, 19235, 9798, 0
+</span><span class='line'>UbUgUrUa       DW    16384, -10879, -5505, 0, 16384, -10879, -5505, 0
+</span><span class='line'>VbVgVrVa       DW    -2654, -13730, 16384, 0, -2654, -13730, 16384, 0
+</span><span class='line'>const128       DW    128, 0, 128, 0, 128, 0, 128, 0
+</span><span class='line'>F000           DW    0, 65280, 0, 65280, 0, 65280, 0, 65280
 </span><span class='line'>
 </span><span class='line'>
-</span><span class='line'>Logger::Logger()
-</span><span class='line'>{
-</span><span class='line'>  Initialise(false);
-</span><span class='line'>}
+</span><span class='line'>.code
+</span><span class='line'>PUBLIC ARGB2AYUV
+</span><span class='line'>ARGB2AYUV PROC
+</span><span class='line'>    mov qword ptr [rsp+ 8], rcx ;pDest
+</span><span class='line'>    mov qword ptr [rsp+16], rdx ;pSrc
+</span><span class='line'>    mov dword ptr [rsp+24], r8d ;lWidth
+</span><span class='line'>    mov dword ptr [rsp+32], r9d ;lHeight
+</span><span class='line'>   
+</span><span class='line'>    push rbp
+</span><span class='line'>    push rdi
+</span><span class='line'>    push rsi
+</span><span class='line'>    mov rbp, rsp
+</span><span class='line'>    sub rsp, 16
+</span><span class='line'>   
+</span><span class='line'>    ;int iCycle  = lWidth >> 2;
+</span><span class='line'>    mov eax, dword ptr [rbp+48]  ;lWidth
+</span><span class='line'>    sar eax, 2                   ;lWidth>>2
+</span><span class='line'>    mov dword ptr [rbp-16], eax  ;iCycle
+</span><span class='line'>   
+</span><span class='line'>    ;int iRemain = lStride - (lWidth &lt;&lt; 2);
+</span><span class='line'>    mov eax, dword ptr [rbp+48]  ;lWidth
+</span><span class='line'>    shl eax, 2                   ;lWidth&lt;&lt;2
+</span><span class='line'>    mov ecx, dword ptr [rbp+64]  ;lStride
+</span><span class='line'>    sub     ecx, eax
+</span><span class='line'>    mov     eax, ecx
+</span><span class='line'>    mov qword ptr [rbp-8], 0     ;add for iRemain = 0
+</span><span class='line'>    mov dword ptr [rbp-8], eax   ;iRemain
 </span><span class='line'>
-</span><span class='line'>Logger::~Logger()
-</span><span class='line'>{
-</span><span class='line'>  Dispose();
-</span><span class='line'>}
+</span><span class='line'>    ;prepare 
+</span><span class='line'>    mov rdx, qword ptr [rbp+32]  ;pDest
+</span><span class='line'>    mov rcx, qword ptr [rbp+40]  ;pSrc
+</span><span class='line'>    mov edi, dword ptr [rbp+56]  ;lHeight
+</span><span class='line'>    mov rsi, qword ptr [rbp- 8]  ;iRemain
+</span><span class='line'>    
+</span><span class='line'>    pxor xmm0, xmm0
+</span><span class='line'>    
+</span><span class='line'>NextLine:
+</span><span class='line'>    mov     eax, dword ptr [rbp-16]  ;iCycle
+</span><span class='line'>NextCycle:
+</span><span class='line'>    movdqa xmm1, [rcx]       ;A3 R3 G3 B3 A2 R2 G2 B2 A1 R1 G1 B1 A0 R0 G0 B0
+</span><span class='line'>    movdqa xmm2, xmm1        ;A3 R3 G3 B3 A2 R2 G2 B2 A1 R1 G1 B1 A0 R0 G0 B0
 </span><span class='line'>
-</span><span class='line'>void Logger::Initialise(bool bAppend)
-</span><span class='line'>{
-</span><span class='line'>  if (m_strFilePath.length() > 0) {
-</span><span class='line'>      m_hLogFile = bAppend ? fopen(m_strFilePath.c_str(), "a+") 
-</span><span class='line'>                       : fopen(m_strFilePath.c_str(), "w+");  
-</span><span class='line'>  }
-</span><span class='line'>}
+</span><span class='line'>    punpcklbw xmm1, xmm0     ;00 A1 00 R1 00 G1 00 B1 00 A0 00 R0 00 G0 00 B0
+</span><span class='line'>    punpckhbw xmm2, xmm0     ;00 A3 00 R3 00 G3 00 B3 00 A2 00 R2 00 G2 00 B2
 </span><span class='line'>
-</span><span class='line'>void Logger::Dispose()
-</span><span class='line'>{
-</span><span class='line'>  if (NULL != m_hLogFile) {
-</span><span class='line'>      fflush(m_hLogFile);
-</span><span class='line'>      fclose(m_hLogFile);
-</span><span class='line'>      m_hLogFile = NULL;
-</span><span class='line'>  }
-</span><span class='line'>}
+</span><span class='line'>    ;y = (9798*r + 19235*g + 3736*b) / 32768
+</span><span class='line'>    movdqa     xmm3, xmm1    ;00 A1 00 R1 00 G1 00 B1 00 A0 00 R0 00 G0 00 B0
+</span><span class='line'>    movdqa     xmm4, xmm2    ;00 A3 00 R3 00 G3 00 B3 00 A2 00 R2 00 G2 00 B2
 </span><span class='line'>
-</span><span class='line'>void Logger::Log(const LogLevel Level, const char *Format, ...)
-</span><span class='line'>{
-</span><span class='line'>  if (m_LogLevel > Level) return;
+</span><span class='line'>    pmaddwd     xmm3, xmmword ptr YbYgYrYa    
+</span><span class='line'>    pmaddwd xmm4, xmmword ptr YbYgYrYa    
 </span><span class='line'>
-</span><span class='line'>  if (NULL == m_hLogFile) return; 
+</span><span class='line'>    pshufd     xmm5, xmm3, 0b1h
+</span><span class='line'>    pshufd     xmm6, xmm4, 0b1h
 </span><span class='line'>
-</span><span class='line'>  char szBuffer[1024];
+</span><span class='line'>    paddd     xmm3, xmm5      ;Y1 Y1 Y0 Y0
+</span><span class='line'>    paddd     xmm4, xmm6      ;Y3 Y3 Y2 Y2
 </span><span class='line'>
-</span><span class='line'>  va_list args;
-</span><span class='line'>  va_start(args, Format);
-</span><span class='line'>  vsprintf(szBuffer, Format, args);
-</span><span class='line'>  va_end(args);
+</span><span class='line'>    psrad xmm3, 15
+</span><span class='line'>    psrad xmm4, 15
+</span><span class='line'>    pand  xmm3, xmmword ptr mask0000ffff ;0 Y1 0 Y0
+</span><span class='line'>    pand  xmm4, xmmword ptr mask0000ffff ;0 Y3 0 Y2
 </span><span class='line'>
-</span><span class='line'>  SYSTEMTIME st;      
-</span><span class='line'>  GetLocalTime(&st);
-</span><span class='line'>  if (0 > fprintf(m_hLogFile, "[%02u:%02u:%02u:%03u]\t[%s]\t%s\n", 
-</span><span class='line'>      st.wHour, st.wMinute, st.wSecond, st.wMilliseconds, 
-</span><span class='line'>      LogLevelStr[Level], szBuffer)) {
-</span><span class='line'>      Dispose();
-</span><span class='line'>  }
-</span><span class='line'>  else {
-</span><span class='line'>      fflush(m_hLogFile);
-</span><span class='line'>  }
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'>    packssdw xmm3, xmm4        ;0 Y3 0 Y2 0 Y1 0 Y0........
+</span><span class='line'>
+</span><span class='line'>    ;u = (-5505*r - 10879*g + 16384*b) / 32768
+</span><span class='line'>    ;......
+</span><span class='line'>    ;v = (16384*r - 13730*g - 2654*b) / 32768
+</span><span class='line'>    ;......
+</span><span class='line'>
+</span><span class='line'>    ;begin to next
+</span><span class='line'>    add rdx, 16
+</span><span class='line'>    add rcx, 16
+</span><span class='line'>    dec eax
+</span><span class='line'>    jnz NextCycle
+</span><span class='line'>    add rdx, rsi
+</span><span class='line'>
+</span><span class='line'>    dec edi
+</span><span class='line'>    jnz NextLine
+</span><span class='line'>    
+</span><span class='line'>    ;exit
+</span><span class='line'>    add rsp, 16
+</span><span class='line'>    pop rsi
+</span><span class='line'>    pop rdi
+</span><span class='line'>    pop rbp    
+</span><span class='line'>    emms
+</span><span class='line'>    ret
+</span><span class='line'>      
+</span><span class='line'>ARGB2AYUV ENDP
+</span><span class='line'>End</span></code></pre></td></tr></table></div></figure>
 
 
-<hr />
+<p>对于寄存器，在x64平台中，原来的32位寄存器被扩展到64位，并新增了8个64位的通用寄存器R8~R15，另外还增加了8个128位的XMM寄存器XMM8~XMM15。</p>
 
-<h3>log的使用示例</h3>
+<p>同时，原来的32位通用寄存器仍然可以使用，但32位寄存器和新的64位寄存器混合使用时，要注意相互赋值的地方，应该要匹配。</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>#include "Log.h"
-</span><span class='line'>
-</span><span class='line'>LogData(LOG_TRACE, "log information\n");
-</span><span class='line'>
-</span><span class='line'>int i = 100;
-</span><span class='line'>LogData(LOG_TRACE, "i = %d\n", i);
-</span><span class='line'>
-</span><span class='line'>int j = 10;
-</span><span class='line'>LogData(LOG_TRACE, "i = %d, j = %d\n", i, j);
-</span><span class='line'>
-</span><span class='line'>SetLogFile("c:\\log.txt"); //set log file path</span></code></pre></td></tr></table></div></figure>
-
-
-
+<p>另外，在内存访问的地方，必须要通过PTR指明数据的类型，否则编译器会报错。</p>
 </div>
 
 
@@ -458,12 +380,12 @@
   
 
 
-<time datetime="2012-03-18T20:10:00+08:00" pubdate data-updated="true">Mar 18<span>th</span>, 2012</time>
+<time datetime="2012-04-11T17:53:00+08:00" pubdate data-updated="true">Apr 11<span>th</span>, 2012</time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/c-/'>C++</a>, <a class='category' href='/blog/categories/log/'>Log</a>
+    <a class='category' href='/blog/categories/c-/'>C++</a>, <a class='category' href='/blog/categories/vs2005/'>VS2005</a>, <a class='category' href='/blog/categories/x64/'>X64</a>
   
 </span>
 
@@ -472,7 +394,7 @@
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://shanewfx.github.com/blog/2012/03/18/a-simple-log-tool/" data-via="" data-counturl="http://shanewfx.github.com/blog/2012/03/18/a-simple-log-tool/" >Tweet</a>
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://shanewfx.github.com/blog/2012/04/11/x64-filter-porting/" data-via="" data-counturl="http://shanewfx.github.com/blog/2012/04/11/x64-filter-porting/" >Tweet</a>
   
   
   
@@ -481,10 +403,8 @@
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/2012/03/18/64bit-programming/" title="Previous Post: VS2005下的64位编程与移植">&laquo; VS2005下的64位编程与移植</a>
+        <a class="basic-alignment left" href="/blog/2012/03/26/vs2005-64bit-programming/" title="Previous Post: VS2005 64-bit Programming Note">&laquo; VS2005 64-bit Programming Note</a>
       
-      
-        <a class="basic-alignment right" href="/blog/2012/03/26/vs2005-64bit-programming/" title="next Post: VS2005 64-bit Programming Note">VS2005 64-bit Programming Note &raquo;</a>
       
     </p>
   </footer>
@@ -614,8 +534,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://shanewfx.github.com/blog/2012/03/18/a-simple-log-tool/';
-        var disqus_url = 'http://shanewfx.github.com/blog/2012/03/18/a-simple-log-tool/';
+        var disqus_identifier = 'http://shanewfx.github.com/blog/2012/04/11/x64-filter-porting/';
+        var disqus_url = 'http://shanewfx.github.com/blog/2012/04/11/x64-filter-porting/';
         var disqus_script = 'embed.js';
       
     (function () {

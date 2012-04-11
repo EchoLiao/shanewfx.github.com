@@ -9,7 +9,7 @@
   <meta name="author" content="Shane">
 
   
-  <meta name="description" content="最近接到的任务是将32位的directshow filter移植到64位平台下，因此，借此机会学习了一点关于64位编程方面的内容。 由于平时的开发环境是Windows + VS2005，所以，下面的内容也主要是讨论VS2005下64位编程的一些主要事项。不过，对于其他平台下的64位编程也有参考价值 &hellip;">
+  <meta name="description" content="64位filter开发工具为VS2005，原来使用VC6开发的filter要转换到VS2005下。 32位的filter移植到x64平台上，对于没有汇编的filter，工作比较简单，主要就是编译选项的设置和修改指针与整形数相互强制转换的地方，以及部分数据类型不匹配等。 ">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -78,6 +78,51 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/04/11/x64-filter-porting/">X64 Filter移植笔记</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-04-11T17:53:00+08:00" pubdate data-updated="true">Apr 11<span>th</span>, 2012</time>
+        
+         | <a href="/blog/2012/04/11/x64-filter-porting/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>64位filter开发工具为VS2005，原来使用VC6开发的filter要转换到VS2005下。</p>
+
+<p>32位的filter移植到x64平台上，对于没有汇编的filter，工作比较简单，主要就是编译选项的设置和修改指针与整形数相互强制转换的地方，以及部分数据类型不匹配等。</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2012/04/11/x64-filter-porting/">阅读全文 &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -515,6 +560,10 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2012/04/11/x64-filter-porting/">x64 filter移植笔记</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2012/03/26/vs2005-64bit-programming/">VS2005 64-bit Programming Note</a>
       </li>
     
@@ -530,10 +579,6 @@
         <a href="/blog/2012/03/17/compile-boost-v1-dot-49-dot-0/">Compile Boost v1.49.0</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2012/03/07/isdb-t-slash-sbtvd-t-closed-caption/">ARIB Closed Caption</a>
-      </li>
-    
   </ul>
 </section>
 <section>
@@ -542,7 +587,7 @@
 </section>
 <section>
   <h1>Tag Cloud</h1>
-    <span id="tag-cloud"><a href='/blog/categories/boost' style='font-size: 115.0%'>Boost(1)</a> <a href='/blog/categories/c-' style='font-size: 160.0%'>C++(4)</a> <a href='/blog/categories/closed-caption' style='font-size: 115.0%'>Closed caption(1)</a> <a href='/blog/categories/dtvcc' style='font-size: 115.0%'>Dtvcc(1)</a> <a href='/blog/categories/git' style='font-size: 115.0%'>Git(1)</a> <a href='/blog/categories/log' style='font-size: 115.0%'>Log(1)</a> <a href='/blog/categories/markdown' style='font-size: 115.0%'>Markdown(1)</a> <a href='/blog/categories/octopress' style='font-size: 130.0%'>Octopress(2)</a> <a href='/blog/categories/vs2005' style='font-size: 115.0%'>Vs2005(1)</a> <a href='/blog/categories/x64' style='font-size: 130.0%'>X64(2)</a> </span>
+    <span id="tag-cloud"><a href='/blog/categories/boost' style='font-size: 112.0%'>Boost(1)</a> <a href='/blog/categories/c-' style='font-size: 160.0%'>C++(5)</a> <a href='/blog/categories/closed-caption' style='font-size: 112.0%'>Closed caption(1)</a> <a href='/blog/categories/dtvcc' style='font-size: 112.0%'>Dtvcc(1)</a> <a href='/blog/categories/git' style='font-size: 112.0%'>Git(1)</a> <a href='/blog/categories/log' style='font-size: 112.0%'>Log(1)</a> <a href='/blog/categories/markdown' style='font-size: 112.0%'>Markdown(1)</a> <a href='/blog/categories/octopress' style='font-size: 124.0%'>Octopress(2)</a> <a href='/blog/categories/vs2005' style='font-size: 124.0%'>Vs2005(2)</a> <a href='/blog/categories/x64' style='font-size: 136.0%'>X64(3)</a> </span>
 </section>
 <section>
   <h1>大牛博客</h1>
