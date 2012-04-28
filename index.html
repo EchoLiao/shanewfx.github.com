@@ -9,7 +9,7 @@
   <meta name="author" content="Shane">
 
   
-  <meta name="description" content="64位filter开发工具为VS2005，原来使用VC6开发的filter要转换到VS2005下。 32位的filter移植到x64平台上，对于没有汇编的filter，工作比较简单，主要就是编译选项的设置和修改指针与整形数相互强制转换的地方，以及部分数据类型不匹配等。 ">
+  <meta name="description" content="在上一篇已经大概讲了一下Git中的常用命令，本文希望能够在此基础上再做些总结，以结束Git第一阶段的学习。 本文尽量指出在不同情景下如何选择合适的Git命令来达到自己的目的，当然，由于Git太过强大、灵活，有时同一问题可以有多种不同的解决方案，这里不太可能全部列出，只会选择一些自己测试可用的方法 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -49,7 +49,7 @@
   <header role="banner"><hgroup>
   <h1><a href="/">思考的轨迹</a></h1>
   
-    <h2>.....人若无名 专心练剑.....</h2>
+    <h2>人若无名 专心练剑</h2>
   
 </hgroup>
 
@@ -78,6 +78,106 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/04/28/git-command-note/">Git常用命令的使用情景</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-04-28T13:43:00+08:00" pubdate data-updated="true">Apr 28<span>th</span>, 2012</time>
+        
+         | <a href="/blog/2012/04/28/git-command-note/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>在<a href="http://shanewfx.github.com/blog/2012/04/21/learn-git-command/">上一篇</a>已经大概讲了一下Git中的常用命令，本文希望能够在此基础上再做些总结，以结束Git第一阶段的学习。</p>
+
+<p>本文尽量指出在不同情景下如何选择合适的Git命令来达到自己的目的，当然，由于Git太过强大、灵活，有时同一问题可以有多种不同的解决方案，这里不太可能全部列出，只会选择一些自己测试可用的方法。</p>
+
+<p>文中会稍微谈一些Git内部实现的细节，但不会太具体，同时这些内容大部分是基于自己在学习过程中的一些理解，所以也不能保证相关的解释一定是正确的。</p>
+
+<p>如发现有误，请告之，在此谢过!</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2012/04/28/git-command-note/">阅读全文 &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/04/21/learn-git-command/">Git学习笔记</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-04-21T13:39:00+08:00" pubdate data-updated="true">Apr 21<span>st</span>, 2012</time>
+        
+         | <a href="/blog/2012/04/21/learn-git-command/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>前一段时间在<a href="https://github.com/">Github</a>上用<a href="https://github.com/imathis/octopress">Octopress</a>搭建了博客，从此，就需要和<strong>Git</strong>不断打交道，虽然用到的Git命令不是很多。</p>
+
+<p>刚好，这几天x64移植项目告一段落，有了点空闲时间，想想还是系统地去学习一下Git吧。</p>
+
+<p>当然，学习Git，我也希望在今后的开发中能够用Git来管理自己的Code，结束之前那种最原始的、靠每天备份的笨方法。</p>
+
+<p>关于Git的教程，网上有不少，感觉用的人也挺多的，所以一般的资料和问题解决方法基本通过Google都能够获得。</p>
+
+<p>这里，关于Git的历史、原理等不会涉及太多，主要是从自身日常管理Code这个角度去谈谈如何使用Git管理代码，让自己先达到能够熟练Git这个目标。</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2012/04/21/learn-git-command/">阅读全文 &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -451,60 +551,9 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/02/16/bulid-blog-by-octopress/">搭Blog 学Git</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-02-16T14:45:00+08:00" pubdate data-updated="true">Feb 16<span>th</span>, 2012</time>
-        
-         | <a href="/blog/2012/02/16/bulid-blog-by-octopress/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>想要有一个自己的独立博客是很久之前的事。</p>
-
-<p>以前也在其他网站上写过自己的博客，但总觉得用的不顺手，感觉少了归属感，最主要是提供的界面感觉都不怎么好。</p>
-
-<p>最近想学学<strong>Git</strong>，知道了<strong>Github</strong>，开始以为就是个代码仓库，后来才发现还提供了page服务，可以用来在上面搭建自己的<strong>独立博客</strong>。</p>
-
-<p>在Github上搭建博客可以利用<a href="https://github.com/mojombo/jekyll/wiki">Jekyll</a>或者<a href="http://octopress.org/">Octopress</a>，Octopress是在Jekyll上建立起来的，即使没有网站设计经验的人也能够快速搭建起自己的博客。</p>
-
-<p>Jekyll和Octopress都是利用<strong>Ruby</strong>实现的，因此在搭建自己博客的过程中难免要接触到一些Ruby的东西，嗯，这说不定也是一个让自己开始了解Ruby的契机。</p>
-
-<p>整个博客的内容和设置都是通过Git进行版本管理的，其中当然需要了解一些基本的Git操作，其实也没有几个常用的命令。</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2012/02/16/bulid-blog-by-octopress/">阅读全文 &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
+    
+      <a class="prev" href="/blog/page/2/">&larr; Older</a>
     
     <a href="/blog/archives">Blog Archives</a>
     
@@ -560,6 +609,14 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2012/04/28/git-command-note/">Git常用命令的使用情景</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/04/21/learn-git-command/">Git学习笔记</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2012/04/11/x64-filter-porting/">x64 filter移植笔记</a>
       </li>
     
@@ -571,14 +628,6 @@
         <a href="/blog/2012/03/18/a-simple-log-tool/">A Simple Log Tool</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2012/03/18/64bit-programming/">VS2005下的64位编程与移植</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/03/17/compile-boost-v1-dot-49-dot-0/">Compile Boost v1.49.0</a>
-      </li>
-    
   </ul>
 </section>
 <section>
@@ -587,7 +636,7 @@
 </section>
 <section>
   <h1>Tag Cloud</h1>
-    <span id="tag-cloud"><a href='/blog/categories/boost' style='font-size: 112.0%'>Boost(1)</a> <a href='/blog/categories/c-' style='font-size: 160.0%'>C++(5)</a> <a href='/blog/categories/closed-caption' style='font-size: 112.0%'>Closed caption(1)</a> <a href='/blog/categories/dtvcc' style='font-size: 112.0%'>Dtvcc(1)</a> <a href='/blog/categories/git' style='font-size: 112.0%'>Git(1)</a> <a href='/blog/categories/log' style='font-size: 112.0%'>Log(1)</a> <a href='/blog/categories/markdown' style='font-size: 112.0%'>Markdown(1)</a> <a href='/blog/categories/octopress' style='font-size: 124.0%'>Octopress(2)</a> <a href='/blog/categories/vs2005' style='font-size: 124.0%'>Vs2005(2)</a> <a href='/blog/categories/x64' style='font-size: 136.0%'>X64(3)</a> </span>
+    <span id="tag-cloud"><a href='/blog/categories/boost' style='font-size: 112.0%'>Boost(1)</a> <a href='/blog/categories/c-' style='font-size: 160.0%'>C++(5)</a> <a href='/blog/categories/closed-caption' style='font-size: 112.0%'>Closed caption(1)</a> <a href='/blog/categories/dtvcc' style='font-size: 112.0%'>Dtvcc(1)</a> <a href='/blog/categories/git' style='font-size: 112.0%'>Git(1)</a> <a href='/blog/categories/git' style='font-size: 124.0%'>Git(2)</a> <a href='/blog/categories/log' style='font-size: 112.0%'>Log(1)</a> <a href='/blog/categories/markdown' style='font-size: 112.0%'>Markdown(1)</a> <a href='/blog/categories/octopress' style='font-size: 124.0%'>Octopress(2)</a> <a href='/blog/categories/vs2005' style='font-size: 124.0%'>Vs2005(2)</a> <a href='/blog/categories/x64' style='font-size: 136.0%'>X64(3)</a> </span>
 </section>
 <section>
   <h1>大牛博客</h1>
