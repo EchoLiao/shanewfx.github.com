@@ -4,7 +4,7 @@
   <title><![CDATA[Category: C++ | 思考的轨迹]]></title>
   <link href="http://shanewfx.github.com/blog/categories/c-/atom.xml" rel="self"/>
   <link href="http://shanewfx.github.com/"/>
-  <updated>2012-04-28T17:56:38+08:00</updated>
+  <updated>2012-05-02T16:43:47+08:00</updated>
   <id>http://shanewfx.github.com/</id>
   <author>
     <name><![CDATA[Shane]]></name>
@@ -12,6 +12,214 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[库的可扩展性与二进制兼容性]]></title>
+    <link href="http://shanewfx.github.com/blog/2012/05/02/binary-compatibility/"/>
+    <updated>2012-05-02T15:44:00+08:00</updated>
+    <id>http://shanewfx.github.com/blog/2012/05/02/binary-compatibility</id>
+    <content type="html"><![CDATA[<p>读了<a href="http://www.cnblogs.com/Solstice/">陈硕</a>写的关于库的<strong>二进制兼容(binary compatibility)</strong>方面的文章，深感此内容的重要性，值得在以后的设计中多加考虑和实践。</p>
+
+<p>在此，记录一下读后感，总结一下在设计库接口时应该考虑的事项，以备后用。</p>
+
+<p>参考的文章如下:</p>
+
+<ul>
+<li><p><a href="http://www.cnblogs.com/Solstice/archive/2011/03/09/1978024.html">二进制兼容性</a></p></li>
+<li><p><a href="http://www.cnblogs.com/Solstice/archive/2011/03/13/1982563.html">避免使用虚函数作为库的接口</a></p></li>
+</ul>
+
+
+<p>另外，作者将其博文整理出一份<a href="http://cloud.github.com/downloads/chenshuo/documents/CppPractice.pdf">C++工程实践经验谈</a>，很值得一读。</p>
+
+<!--more-->
+
+
+<p>以往开发directshow filter时，其接口通常都是采用由纯虚函数组成接口类的方式来实现，其主要原因应该是directshow是以COM为基础而设计出来的框架。</p>
+
+<p>对于一个filter，在发布时，通常要提供一个header file和一个.ax结尾的dll文件，header file告诉AP该filter提供了哪些接口和相关数据结构。</p>
+
+<p>这时，如果有一个新功能需求，需要在原filter的基础上增加，并且新版本的filter要能够直接在AP中直接替换老版本，而不影响AP原有功能（新功能会在下一版AP中被添加），这时，我们该怎么办？</p>
+
+<p>参考陈硕文章中的做法，应该可以这样实现: 新的功能在新的接口中定义，并且新的接口要继承于旧的接口。</p>
+
+<p>大概的实现应该是这样的（略去了其他细节）:</p>
+
+<p><strong>老版本:</strong></p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>class interface1 {
+</span><span class='line'>public:&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;pre>&lt;code> virtual int func1() = 0;
+</span><span class='line'>&lt;/code>&lt;/pre>
+</span><span class='line'>
+</span><span class='line'>&lt;p>};&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p>class filter : public interface1 {&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;pre>&lt;code> virtual int func1();
+</span><span class='line'>&lt;/code>&lt;/pre>
+</span><span class='line'>
+</span><span class='line'>&lt;p>};</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p><strong>新版本:</strong></p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>class interface2 : public interface1 {
+</span><span class='line'>public:&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;pre>&lt;code> virtual int func2() = 0;
+</span><span class='line'>&lt;/code>&lt;/pre>
+</span><span class='line'>
+</span><span class='line'>&lt;p>};&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p>class filter : public interface2 {&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;pre>&lt;code> virtual int func1();
+</span><span class='line'> virtual int func2();
+</span><span class='line'>&lt;/code>&lt;/pre>
+</span><span class='line'>
+</span><span class='line'>&lt;p>};</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>这样做基本满足了要求（二进制兼容的），但这种做法引进了新的接口，而且为了向下兼容，还需要继承老的接口，如果日后新的需求不断出现，则会有更多的接口被引入，长期下去容易引起混乱，对于后续维护的人而言，也可能会造成困惑，因此，这种带版本的接口似乎不是一个很完美的方案。</p>
+
+<p>对于那些老的采用虚函数作为接口的项目，如果后来又新需要，则上述的方法是可取的，因为，你不太可能去修改之前经过测试的稳定代码。</p>
+
+<p>如果是新的项目，可以在设计的时候多考虑一些库的可扩展性和二进制兼容性问题。</p>
+
+<p>二进制兼容性问题是在库扩展新功能或修复bug后更新版本时需要考虑的。</p>
+
+<p>为什么要考虑这样的问题？</p>
+
+<p>因为使用库的项目有很多个，不太能因为某个库的更新而要求所有使用该库的项目全部重新编译，通常，只是要告之用新版本替换相应的老版本库即可，而要达到这样的目的，就需要该库做到接口的二进制兼容。</p>
+
+<p>典型的例子就是那些支持热插拔的plug-in系统，更新插件不需要其宿主也跟着要改变。</p>
+
+<p><strong>下面是不影响二进制兼容的安全做法:</strong></p>
+
+<ul>
+<li><p>增加新的class</p></li>
+<li><p>增加non-virtual成员函数或者static成员函数</p></li>
+<li><p>修改数据成员名称（二进制兼容，但会引起源代码级的不兼容，也容易产生问题）</p></li>
+<li><p>增加新的全局函数（自由函数）</p></li>
+</ul>
+
+
+<p><strong>下面是一定影响二进制兼容的不安全做法（容易造成crash问题）:</strong></p>
+
+<ul>
+<li><p>接口采用虚函数，并在接口中添加新的虚函数（影响了vtable[offset]），就算在尾部添加也是有问题的，因为不能保证该接口没有被继承</p></li>
+<li><p>修改接口中使用的数据结构，如数据类型从short改为int（改变的内部布局）</p></li>
+</ul>
+
+
+<p>为了保证库的可扩展性和二进制兼容，在设计库的接口时，可考虑下面的做法：</p>
+
+<p><strong>1. 用class的non-virtual成员函数作为接口，并且所有的操作放在一个内部class来代理实现</strong></p>
+
+<p><strong>老版本:</strong></p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>class Interface {
+</span><span class='line'>public:&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;pre>&lt;code>Interface() : pImpl(new Impl) {}
+</span><span class='line'>~Interface() { delete pImpl; }
+</span><span class='line'>int func1() { return pImpl-&gt;func1(); }
+</span><span class='line'>&lt;/code>&lt;/pre>
+</span><span class='line'>
+</span><span class='line'>&lt;p>private:&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;pre>&lt;code>class Impl;
+</span><span class='line'>Impl* pImpl;
+</span><span class='line'>&lt;/code>&lt;/pre>
+</span><span class='line'>
+</span><span class='line'>&lt;p>};</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p><strong>新版本:</strong></p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>class Interface {
+</span><span class='line'>public:&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;pre>&lt;code>Interface() : pImpl(new Impl) {}
+</span><span class='line'>~Interface() { delete pImpl; }
+</span><span class='line'>int func1() { return pImpl-&gt;func1(); }
+</span><span class='line'>int func2() { return pImpl-&gt;func2(); }
+</span><span class='line'>&lt;/code>&lt;/pre>
+</span><span class='line'>
+</span><span class='line'>&lt;p>private:&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;pre>&lt;code>class Impl;
+</span><span class='line'>Impl* pImpl;
+</span><span class='line'>&lt;/code>&lt;/pre>
+</span><span class='line'>
+</span><span class='line'>&lt;p>};</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p><strong>2. 使用全局函数作为接口（这种做法在C语言中是最为常见的），内部还是按C++的方式来实现</strong></p>
+
+<p><strong>3. 不得以的情况下，可以使用虚函数做为接口</strong></p>
+
+<p>(全文完)</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[x64 filter移植笔记]]></title>
@@ -965,112 +1173,6 @@ POINTER_32、POINTER_64</p>
 
 
 <p>上述的应该是最基本的，要在64位平台中进行编程，还需要了解更多的这方面的知识。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Compile Boost v1.49.0]]></title>
-    <link href="http://shanewfx.github.com/blog/2012/03/17/compile-boost-v1-dot-49-dot-0/"/>
-    <updated>2012-03-17T21:15:00+08:00</updated>
-    <id>http://shanewfx.github.com/blog/2012/03/17/compile-boost-v1-dot-49-dot-0</id>
-    <content type="html"><![CDATA[<p>对C++程序员来说，Boost是一个非常有名的库，里面提供了很多强大的功能。</p>
-
-<p>不过，我之前一直没有使用和研究过Boost，最近看一些开源的代码中有使用Boost，感觉很不错，于是，今天抽一点时间先将Boost的使用环境先搭起来，后面慢慢学习。</p>
-
-<!--more-->
-
-
-<h2>编译Boost</h2>
-
-<ul>
-<li><p>先到<a href="http://www.boost.org/">Boost的官方网站</a>上下载最新的版本Boost v1.49.0, 我选择的是<a href="http://sourceforge.net/projects/boost/files/boost/1.49.0/">boost_1_49_0.7z</a>;</p></li>
-<li><p>将下载的boost_1_49_0.7z解压缩到D:\Program Files\boost_1_49_0中;</p></li>
-<li><p>为了自动编译Boost，编写了下面的Batch，将Batch代码拷贝到文本文件中，重新命名为为compile_boost_1_49_0.bat;</p></li>
-</ul>
-
-
-<p><div><script src='https://gist.github.com/2058696.js?file='></script>
-<noscript><pre><code>em @echo off
-
-rem 先编译bjam
-start bootstrap.bat
-
-rem 等待一分钟待bjam编译完成（如果电脑性能过差，可以设置等待时间更长一些）
-SET SLEEP=ping 127.0.0.1 -n
-%SLEEP% 60 &gt; nul
-
-rem 利用bjam编译boost库
-rem 在此，我们编译vs2005下的x86及x64共2类boost库文件
-
-rem 建立库文件夹
-rem vs2005 win32库文件夹
-md stage\lib\win32\vs8_0\
-
-rem vs2005 x64库文件夹
-md stage\lib\x64\vs8_0\
-
-
-rem ******************************************************************
-rem 先删除lib下所有文件（不删除文件夹）
-del stage\lib\*.* /Q
-
-rem 编译vs2005 win32库文件
-bjam --toolset=msvc-8.0 architecture=x86 --build-type=complete stage
-
-rem 拷贝至\stage\lib\win32\vs8_0
-copy stage\lib\*.* stage\lib\win32\vs8_0\*.* /Y
-rem ##################################################################
-
-rem ******************************************************************
-rem 先删除lib下所有文件（不删除文件夹）
-del stage\lib\*.* /Q
-
-rem 编译vs2008 x64库文件
-bjam --toolset=msvc-8.0 architecture=x86 address-model=64 --build-type=complete stage
-
-rem 拷贝至\stage\lib\x64\vs8_0
-copy stage\lib\*.* stage\lib\x64\vs8_0\*.* /Y
-rem ##################################################################
-
-rem 删除lib下所有文件（不删除文件夹）
-del stage\lib\*.* /Q</code></pre></noscript></div>
-</p>
-
-<p>由于我使用的VS2005，所以使用了<code>--toolset=msvc-8.0</code>。</p>
-
-<p>如果使用的是其他版本的VS，则上述的代码要作一点小修改，具体就是：</p>
-
-<p>VS2008 -> <code>--toolset=msvc-9.0</code>     VS2010 -> <code>--toolset=msvc-10.0</code></p>
-
-<p>当然，lib的存放的路径也可以改动一下。</p>
-
-<ul>
-<li><p>将上面的compile_boost_1_49_0.bat文件拷贝到D:\Program Files\boost_1_49_0目录中;</p></li>
-<li><p>双击运行compile_boost_1_49_0.bat，这样就开始了漫长的自动编译过程，整个过程大概要2小时（编译了32位和64位的全部lib）;</p></li>
-<li><p>编译结束后，生成的Libs都在D:\Program Files\boost_1_49_0\stage\lib\win32\vs8_0和D:\Program Files\boost_1_49_0\stage\lib\x64\vs8_0两个文件夹下；</p></li>
-</ul>
-
-
-<p>到这里Boost编译的过程就结束了。</p>
-
-<h2>设置VS2005</h2>
-
-<ul>
-<li><p>在Tools->Options->Projects and Solutions->VC++ Directories中：</p>
-
-<pre><code>- Win32平台加入Include files和Library files的路径
-    - Include files: D:\Program Files\boost_1_49_0
-    - Library files: D:\Program Files\boost_1_49_0\stage\lib\win32\vs8_0
-
-- X64平台加入Include files和Library files的路径
-    - Include files: D:\Program Files\boost_1_49_0
-    - Library files: D:\Program Files\boost_1_49_0\stage\lib\x64\vs8_0
-</code></pre></li>
-<li><p>通过上述的设置，在VS2005中就可以正常使用Boost了。</p></li>
-</ul>
-
-
-<p><strong>相信此时你一定很激动，赶紧写个测试程序，来体验一下Boost的强大功能吧!</strong></p>
 ]]></content>
   </entry>
   
