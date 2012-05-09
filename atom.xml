@@ -4,7 +4,7 @@
   <title><![CDATA[思考的轨迹]]></title>
   <link href="http://shanewfx.github.com/atom.xml" rel="self"/>
   <link href="http://shanewfx.github.com/"/>
-  <updated>2012-05-02T16:43:47+08:00</updated>
+  <updated>2012-05-09T16:35:56+08:00</updated>
   <id>http://shanewfx.github.com/</id>
   <author>
     <name><![CDATA[Shane]]></name>
@@ -12,6 +12,214 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[迁移VSS版本库到Git]]></title>
+    <link href="http://shanewfx.github.com/blog/2012/05/09/migrate-from-vss-to-git/"/>
+    <updated>2012-05-09T16:10:00+08:00</updated>
+    <id>http://shanewfx.github.com/blog/2012/05/09/migrate-from-vss-to-git</id>
+    <content type="html"><![CDATA[<p>公司最近有意将版本控制工具从VSS和CVS切换到Git上，由于之前的项目一直是使用VSS和CVS进行版本管理，这次迁移免不了要涉及VSS和CVS版本库向Git进行转换的工作。</p>
+
+<p>带着这个目的，我先尝试着找到VSS到Git迁移的可行方案，因为我之前的项目一直也是用VSS进行版本管理，相对于从没有使用过的CVS而言，应该更容易上手一些。至于CVS如何迁移到Git会在后面进行研究。</p>
+
+<!--more-->
+
+
+<p>之前在学习使用GitStack搭建Git服务器时，在其官方网站上看到一篇讲如何<a href="http://gitstack.com/migrate-from-svn-to-git/">迁移SVN版本库到Git</a>的文章，文中有提到git svn命令，可见Git内部已经有了对SVN版本库进行操作的支持，继而顺着这个思路，试着去找找有没有支持对VSS和CVS的操作，结果发现Git没有对VSS的操作支持，对于CVS倒是有git cvsimport，但在Git Bash中却不认识该命令，运行<code>git help vcsimport</code>也没有相关的文档，而使用<code>git help vcs-migration</code>倒是有文档，其中也提到了git cvsimport，难道是我是在Windows上使用的Git（安装的是msysGit 1.7.10），而在Windows上还不支持该命令吗？不知道在Linux上的情况是怎么样的？</p>
+
+<p>这个问题暂时先搁置，先研究一下如何将原有的VSS版本库迁移到Git上。</p>
+
+<p>既然Git没有对VSS的支持，那么VSS转Git应该是需要第三方的工具来帮助实现这个转换工作（该工具要读取并分析VSS仓库的数据，然后按照Git版本库的内部结构来存放之前VSS版本库中的数据），按照这个思路，在Google上搜索了一下，果然发现有一个这样的工具，那就是<a href="http://code.google.com/p/vss2git/">vss2git</a>，而且是个开源的项目，很对我的胃口。</p>
+
+<p>下载下来并试用了一下，结果成功将之前的一个用VSS管理的项目转换为Git仓库，并且<strong>之前VSS的历史信息也被保留下来</strong>，基本是满足了要求。</p>
+
+<h3>VSS版本库到Git的迁移</h3>
+
+<p>打开VSS2Git，其界面就是一个对话框，在其中作一些必要的设置，主要是设置VSS版本库所在的路径、要转换VSS版本库中哪一个项目（也可以是整个VSS版本库中全部的项目）、转换结果的存放位置、转换Log存放的位置、转换过程中创建Git提交对象时所需的email的domain等，设置好这些之后，点击Go按键即可开始VSS到Git仓库的转换。</p>
+
+<p><a href="http://www.flickr.com/photos/shanewfx/7163442740/" title="Flickr 上 shanewfx 的 VSS2Git"><img src="http://farm8.staticflickr.com/7088/7163442740_845fe43252.jpg" width="500" height="340" alt="VSS2Git"></a></p>
+
+<p>转换所需的时间长短取决于VSS仓库的大小，如果VSS仓库中项目众多，且开发的时间都比较久的话，那么完成整个仓库的转换应该需要的时间会比较长，但如果只是转换其中一个项目到Git，那么时候会比较短。</p>
+
+<p>转换后，通过<code>git log</code>可以看到之前VSS仓库中的历史信息，而且这些历史信息在Git仓库中仍然是按照提交时间的先后来排列的。</p>
+
+<p>在转换过程中，打开存放Git仓库的目录，你会发现工作目录随着时间会在变化，这是因为VSS2Git在转换时会先分析并收集VSS仓库中的各种信息，然后再从VSS仓库中记录的最早的时间点开始Replay（演绎）整个VSS仓库数据形成的过程。</p>
+
+<p>在演绎过程中，应该是先从VSS中取出最初的版本（Git仓库最初为一个空仓库），并将其版本中的文件作为Git工作目录的文件，然后按照Git先对工作目录进行文件快照再提交到Git仓库的做法，按照时间顺序逐个版本进行提交（提交时会取出VSS中对应版本的历史信息），最终将VSS版本库转换为Git仓库。</p>
+
+<p>上述的演绎过程是我自己初步推断的大概过程，实际是否这么实现，请参考VSS2Git的源代码（用C#实现的）。
+另外，VSS仓库内部的数据到底是如何组织的我也没有研究过。</p>
+
+<p><strong>要注意的几点：</strong></p>
+
+<ul>
+<li><p>如果是要将整个VSS仓库中的所有项目都迁移到Git中，那么在VSS2Git界面的Project一项中填上<code>$</code></p></li>
+<li><p>如果只是要将VSS仓库中的某一个项目迁移到Git上，则在Project一项中应填上<code>$/Project1</code> (其中Project1为假设的项目名)，甚至可以仅转换子项目，这样<code>$/Project1/32Bit</code></p></li>
+<li><p>VSS2Git一次要么完成VSS仓库的整体转换，要么只能转换VSS仓库中其中一个项目，这样要实现多个项目的转换就要多次执行VSS2Git</p></li>
+<li><p>VSS2Git的每一次转换会产生一个Git仓库，如果是VSS仓库一次整体转换，则生成的Git仓库中将包含VSS仓库中所有的项目，这样带来的问题是，由于Git仓库中包含了所有的项目，这样以后不同项目的开发人员无法从Git仓库中只checkout出自己负责的那个项目文件，而是要checkout出所有项目的文件，这样对于公司的代码安全是非常不利的，那么，这样就不应该一次将VSS仓库整体转换，而是应该以项目为单位进行逐个转换，这样，对于不同的项目，对其Git仓库就可以为不同的开发人员设置不同的操作权限</p></li>
+<li><p>VSS2Git在生成Git提交信息所需的email时，只是根据从VSS中提取出的User名加上在界面Email domain中填写的内容组合而成，实际生成的email地址未必是有效的（不一定能用来发送email）</p></li>
+</ul>
+
+
+<p>更多的注意事项可至<a href="http://code.google.com/p/vss2git/">VSS2Git的主页</a>查看。</p>
+
+<h3>导入现有的Git仓库到GitStack服务器上</h3>
+
+<p>通过VSS2Git，我们可以将VSS仓库中的项目逐一转换为该项目的Git仓库，这时我们可以将其放置到Git服务器上了，以便后续的开发和维护。</p>
+
+<p>这里，我们假设使用GitStack搭建了Git服务器（如何搭建见<a href="http://shanewfx.github.com/blog/2012/05/03/git-server-based-on-gitstack/">上篇</a>），现在的问题就相当于如何将一个现有的Git仓库导入到GitStack搭建的服务器上。因为正常的流程是在GitStack上先创建裸仓库，然后再向其中提交，如果这样做的话，我们之前的VSS中的历史信息恐怕就要丢失了，而这是我们不希望的结果。</p>
+
+<p>不过幸运的是，GitStack支持导入一个现有的Git仓库到其中，其步骤也很简单，就是先将现有的Git仓库拷贝至C:\GitStack\repositories目录下面，然后登陆到GitStack上，在Repositories列表中会发现我们的Git仓库已经在其中，但Action栏则出现了一个绿色的安装，而非添加用户、查看仓库的那些按钮，这时我们只有点击这个绿色按钮就完成了该Git仓库的导入，之后我们会发现绿色的按钮被正常的添加用户、查看仓库的那些按钮替换掉，这时我们就可以为该Git仓库添加用户并设置访问权限了。</p>
+
+<p><a href="http://www.flickr.com/photos/shanewfx/7163501304/" title="Flickr 上 shanewfx 的 gitstack"><img src="http://farm6.staticflickr.com/5160/7163501304_4d08fab433.jpg" width="500" height="210" alt="gitstack"></a></p>
+
+<p>具体的过程，在GitStack的文档中有详细的阐述，请见<a href="http://gitstack.com/import-an-existing-repository/">Import an existing repository</a>，这里不再赘述。</p>
+
+<p>至此，如何将VSS仓库迁移到Git，并将生成的Git仓库导入到GitStack搭建的服务器上的大概过程就结束了。</p>
+
+<p>（全文完）</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[基于GitStack搭建Git中心服务器]]></title>
+    <link href="http://shanewfx.github.com/blog/2012/05/03/git-server-based-on-gitstack/"/>
+    <updated>2012-05-03T20:10:00+08:00</updated>
+    <id>http://shanewfx.github.com/blog/2012/05/03/git-server-based-on-gitstack</id>
+    <content type="html"><![CDATA[<p>通过前一段时间对Git的学习，基本掌握了Git常用命令的使用方法，并进行了总结，有兴趣的可以看看<a href="http://shanewfx.github.com/blog/2012/04/28/git-command-note/">Git常用命令的使用情景</a>和<a href="http://shanewfx.github.com/blog/2012/04/21/learn-git-command/">Git学习笔记</a>。</p>
+
+<p>在<a href="http://shanewfx.github.com/blog/2012/04/28/git-command-note/">Git常用命令的使用情景</a>中提到过多人协作的项目往往是需要一个中心服务器来同步多人之间的工作成果，另外，最终的工作成果通常也是中心服务器上的代码为准（为了项目管理的需要），因此，备份时往往需要对中心服务器上的仓库进行刻盘。</p>
+
+<p>中心服务器上创建的项目仓库一般为裸仓库（没有工作目录），且需要为项目开发人员设置访问和操作中心服务器上仓库的权限（访问、读、写）。</p>
+
+<p>本文将介绍如何使用开源软件<a href="http://gitstack.com/">GitStack</a>在Windows上搭建Git中心服务器。</p>
+
+<!--more-->
+
+
+<p>为了学习如何在Windows上搭建Git服务器，用Google搜索了一下，发现多数的方案是采用CopSSH + msysgit + PuTTY的方式来实现，这种方案使用<a href="http://zh.wikipedia.org/wiki/SSH">SSH</a>协议（采用公钥和私钥进行身份验证，用<a href="http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html">PuTTY</a>可以产生公钥和私钥，关于公钥和私钥可参考<a href="http://www.360doc.com/content/12/0502/18/1016783_208170505.shtml">这篇</a>入门介绍）与Git服务器通信，在安全性上应该来说是比较高的，但缺点就是搭建过程比较麻烦，且要清楚一些概念才知道自己在做什么，因此对新手来说有一定的难度。</p>
+
+<p>另外，让我暂时没采用这种的方案的原因是CopSSH已经不再免费了（找到一个免费的版本<a href="http://sourceforge.net/projects/sereds/files/Copssh/3.0.3/">Copssh 3.0.3</a>，需要将<a href="http://sea.tomsk.ru/pub/soft/git/Copssh_3.0.3_Installer/">icwbase-2.0.3-patch-100.exe</a>这个补丁拷贝到Copssh的安装目录下运行来修复回退键和左右方向键不能正常的问题），对于喜欢开源软件的我来说，还是希望能够找到其他的开源软件来代替。</p>
+
+<p>关于这种方案的几篇文章：</p>
+
+<ul>
+<li><p><a href="http://www.codeproject.com/Articles/296398/Step-by-Step-Setup-Git-Server-on-Windows-with-CopS">Step by Step Setup Git Server on Windows with CopSSH + msysGit and Integrate Git with Visual Studio</a></p></li>
+<li><p><a href="http://www.timdavis.com.au/git/setting-up-a-msysgit-server-with-copssh-on-windows/">Setting up a Msysgit Server with copSSH on Windows</a></p></li>
+<li><p><a href="http://www.cnblogs.com/Yinner/archive/2011/05/01/2034147.html">如何在WINDOWS XP下使用copSSH配置GIT服务器 + TortiseGIT客户端</a></p></li>
+</ul>
+
+
+<p>另外，还有一种采用Gitolite来搭建的方案，可参考<a href="http://www.ossxp.com/doc/git/gitolite.html">Gitolite构建Git服务器</a>，讲的很详细。</p>
+
+<p>无意之中，通过google发现了<a href="http://gitstack.com/">GitStack</a>，查看了官方文档，感觉不需要做什么特殊的设置就可以在Windows上搭建Git服务器，并且对用户权限的设置也很简单，故决定下载下来试用一下，测试下来果然很方便，且在Client端也成功进行了clone和push等操作（虽然中间遇到一个问题，后面会提到）。</p>
+
+<p>为了以后有个参考，特在此记录下用GitStack搭建Git服务器的主要过程。</p>
+
+<p>工具列表：</p>
+
+<ul>
+<li>服务器端：<a href="http://gitstack.com/download/">GitStack 1.4.1</a>，GitStack中已经集成了Git，可以不用再独立安装msysgit</li>
+<li>客户端：<a href="http://code.google.com/p/msysgit/downloads/list">msysgit 1.7.10</a></li>
+</ul>
+
+
+<h3>下载并安装GitStack</h3>
+
+<p>到其<a href="http://gitstack.com/">官方网站</a>上下载最新版的<a href="http://gitstack.com/download/">GitStack 1.4.1</a>。</p>
+
+<p>安装文件有100M，要注意的是，目前GitStack只支持下面几个系统（不支持Windows XP）：</p>
+
+<ul>
+<li>Windows Server 2008</li>
+<li>Windows Server 2008 R2</li>
+<li>Windows Vista</li>
+<li>Windows 7</li>
+</ul>
+
+
+<p>另外，GitStack是一个新的开源软件（可以看看<a href="http://gitstack.com/category/releases/">release的历史</a>），目前有些功能可能还不是很完善，文档也不是很全面，好在GitStack并不复杂。</p>
+
+<p>安装和普通的Windows软件一样，双击安装包自动进行安装，要注意的是最好其安装路径中不要包括空格，所以不建议安装到C:\Program Files下，默认是安装到C:\GitStack下。</p>
+
+<p>安装好GitStack后，下面主要就是配置GitStack和仓库管理。</p>
+
+<p>提醒一下，只需要在服务器上安装GitStack即可，其他的客户机上是不要安装的。安装好GitStack后，可以在任意机器上通过浏览器登录到Git服务器上（当然实际上只有仓库的管理员才有权限登录）。</p>
+
+<h3>GitStack的配置</h3>
+
+<p>在服务器上，可以通过开始菜单找到GitStack打开，也可以直接打开浏览器，在地址栏里输入http://localhost/gitstack/打开登录界面。</p>
+
+<p>另外，也可以通过server机的IP地址来登录，如server的IP地址为：192.168.0.105，则可以直接在浏览器的地址栏中输入http://192.168.0.105/gitstack/打开登录界面(注意在客户机上只能使用这种方式来打开登录界面，通过ipconfig可以查看本机的IP地址)。</p>
+
+<p>初始状态下，默认的登录账户为admin，登录密码也为admin。管理员登录后可在Settings->General中修改admin的登录密码。</p>
+
+<p>勾选Enable web based repository browsing选项开启在浏览器中直接查看Git仓库的内容。</p>
+
+<p>另外还有两个Repositories和Users &amp; Groups两个界面，其中在Repositories中可以在服务器上创建项目的裸仓库，直接输入仓库名（如输入ProjectRepos），然后点击Create按钮即可（会在服务器C:\GitStack\repositories下创建一个ProjectRepos.git裸仓库），创建好的仓库也会在Repositories中显示出来，并显示出该仓库的clone的地址git clone http://localhost/ProjectRepos.git，之后就可以在Action下通过浏览器查看仓库、添加用户/Group并设置用户/Group权限等。</p>
+
+<p>在Users &amp; Groups中，Users下是用来创建用户或修改用户密码等，每个用户对应一个Username和其Password，已有的用户会在上面的列表中显示出来；Groups下用于创建组，可以在每个Group下添加或移除用户，已有的Group也会在列表中显示出来。</p>
+
+<p><a href="http://www.flickr.com/photos/shanewfx/7163525050/" title="Flickr 上 shanewfx 的 gitstack_1.5"><img src="http://farm9.staticflickr.com/8164/7163525050_4e0a696de9.jpg" width="500" height="370" alt="gitstack_1.5"></a></p>
+
+<h3>牛刀小试</h3>
+
+<p>上述已经在服务器上创建了一个ProjectRepos.git裸仓库，现在我们在服务器上来克隆该仓库。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cd d:
+</span><span class='line'>mkdir project
+</span><span class='line'>cd project
+</span><span class='line'>git clone http://192.168.0.105/ProjectRepos LocalRepos 或 git clone http://localhost/ProjectRepos LocalRepos 或 git clone http://localhost:80/ProjectRepos LocalRepos</span></code></pre></td></tr></table></div></figure>
+
+
+<p>默认的是80端口，可以修改为其他端口。
+这里，会提示输入用户名和密码，注意输入的用户名和密码不会被显示出来。</p>
+
+<p>cd LocalRepos
+进入了工作目录，我们可以添加文件到工作区，并提交到本地仓库中。</p>
+
+<p>然后，将本地修改推送到服务器的仓库里：git push origin master，这里会提示输入用户名和密码，注意输入的用户名和密码不会被显示出来。
+通过git remote -v，我们可以查看origin对应的服务器上的仓库地址。</p>
+
+<p>这时打开GitStack，可以看到服务器上仓库有了提交的内容。</p>
+
+<h3>在客户机上克隆服务器的仓库到本地</h3>
+
+<p>先在客户机上安装msysgit 1.7.10。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cd d:
+</span><span class='line'>mkdir project
+</span><span class='line'>cd project
+</span><span class='line'>git clone http://192.168.0.105/ProjectRepos LocalRepos</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这里，会提示输入用户名和密码，注意输入的用户名和密码不会被显示出来。</p>
+
+<p>cd LocalRepos
+进入了工作目录，我们可以添加文件到工作区，并提交到本地仓库中。</p>
+
+<p>然后，将本地修改推送到服务器的仓库里：git push origin master，这里会提示输入用户名和密码，注意输入的用户名和密码不会被显示出来。
+通过git remote -v，我们可以查看origin对应的服务器上的仓库地址。</p>
+
+<p>这时打开GitStack，可以看到服务器上仓库有了提交的内容。</p>
+
+<p>在客户机上也可以打开GitStack，直接在浏览器的地址栏中输入http://192.168.0.105/gitstack/打开登录界面，当然这需要知道管理员密码。</p>
+
+<p>（这里要注意的是，要保证在客户机上能够成功打开GitStack或者从服务器上克隆仓库，必须将服务器的防火墙关闭，否则在客户机上的这些操作就会失败。这个问题一直困扰了我好几个小时。）</p>
+
+<p>可见，服务器和客户机在操作上已经没有什么区别了，这正是Git作为分布式版本控制系统的体现。</p>
+
+<p>（全文完）</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[库的可扩展性与二进制兼容性]]></title>

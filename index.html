@@ -9,8 +9,7 @@
   <meta name="author" content="Shane">
 
   
-  <meta name="description" content="读了陈硕写的关于库的二进制兼容(binary compatibility)方面的文章，深感此内容的重要性，值得在以后的设计中多加考虑和实践。 在此，记录一下读后感，总结一下在设计库接口时应该考虑的事项，以备后用。 参考的文章如下: 二进制兼容性
-避免使用虚函数作为库的接口 另外， &hellip;">
+  <meta name="description" content="公司最近有意将版本控制工具从VSS和CVS切换到Git上，由于之前的项目一直是使用VSS和CVS进行版本管理，这次迁移免不了要涉及VSS和CVS版本库向Git进行转换的工作。 带着这个目的，我先尝试着找到VSS到Git迁移的可行方案，因为我之前的项目一直也是用VSS进行版本管理， &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -78,6 +77,100 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/05/09/migrate-from-vss-to-git/">迁移VSS版本库到Git</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-05-09T16:10:00+08:00" pubdate data-updated="true">May 9<span>th</span>, 2012</time>
+        
+         | <a href="/blog/2012/05/09/migrate-from-vss-to-git/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>公司最近有意将版本控制工具从VSS和CVS切换到Git上，由于之前的项目一直是使用VSS和CVS进行版本管理，这次迁移免不了要涉及VSS和CVS版本库向Git进行转换的工作。</p>
+
+<p>带着这个目的，我先尝试着找到VSS到Git迁移的可行方案，因为我之前的项目一直也是用VSS进行版本管理，相对于从没有使用过的CVS而言，应该更容易上手一些。至于CVS如何迁移到Git会在后面进行研究。</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2012/05/09/migrate-from-vss-to-git/">阅读全文 &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/05/03/git-server-based-on-gitstack/">基于GitStack搭建Git中心服务器</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-05-03T20:10:00+08:00" pubdate data-updated="true">May 3<span>rd</span>, 2012</time>
+        
+         | <a href="/blog/2012/05/03/git-server-based-on-gitstack/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>通过前一段时间对Git的学习，基本掌握了Git常用命令的使用方法，并进行了总结，有兴趣的可以看看<a href="http://shanewfx.github.com/blog/2012/04/28/git-command-note/">Git常用命令的使用情景</a>和<a href="http://shanewfx.github.com/blog/2012/04/21/learn-git-command/">Git学习笔记</a>。</p>
+
+<p>在<a href="http://shanewfx.github.com/blog/2012/04/28/git-command-note/">Git常用命令的使用情景</a>中提到过多人协作的项目往往是需要一个中心服务器来同步多人之间的工作成果，另外，最终的工作成果通常也是中心服务器上的代码为准（为了项目管理的需要），因此，备份时往往需要对中心服务器上的仓库进行刻盘。</p>
+
+<p>中心服务器上创建的项目仓库一般为裸仓库（没有工作目录），且需要为项目开发人员设置访问和操作中心服务器上仓库的权限（访问、读、写）。</p>
+
+<p>本文将介绍如何使用开源软件<a href="http://gitstack.com/">GitStack</a>在Windows上搭建Git中心服务器。</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2012/05/03/git-server-based-on-gitstack/">阅读全文 &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -463,98 +556,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/03/17/compile-boost-v1-dot-49-dot-0/">Compile Boost v1.49.0</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-03-17T21:15:00+08:00" pubdate data-updated="true">Mar 17<span>th</span>, 2012</time>
-        
-         | <a href="/blog/2012/03/17/compile-boost-v1-dot-49-dot-0/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>对C++程序员来说，Boost是一个非常有名的库，里面提供了很多强大的功能。</p>
-
-<p>不过，我之前一直没有使用和研究过Boost，最近看一些开源的代码中有使用Boost，感觉很不错，于是，今天抽一点时间先将Boost的使用环境先搭起来，后面慢慢学习。</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2012/03/17/compile-boost-v1-dot-49-dot-0/">阅读全文 &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/03/07/isdb-t-slash-sbtvd-t-closed-caption/">ISDB-T/SBTVD-T Closed Caption</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-03-07T16:40:00+08:00" pubdate data-updated="true">Mar 7<span>th</span>, 2012</time>
-        
-         | <a href="/blog/2012/03/07/isdb-t-slash-sbtvd-t-closed-caption/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><a href="http://en.wikipedia.org/wiki/Closed_captioning">Closed Caption</a>（可简称为CC）可以简单来看作为一种字幕，最初设计的目的是为了帮助有听力障碍的人理解电视节目的内容，即将节目中的Audio（背景音乐显示音乐符号）通过文字在屏幕上显示出来。</p>
-
-<p>目前，Closed Caption的标准主要有ATSC定义的608和708，日本ARIB STD-B24等，而巴西的数字电视标准SBTVD-T是在日本的ISDB-T标准基础上稍作修改而来，因此，巴西数字电视的Closed Caption标准也是采用了ARIB STD-B24。</p>
-
-<p>ARIB STD-B24定义的Closed Caption下面被简称为ARIB CC。</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2012/03/07/isdb-t-slash-sbtvd-t-closed-caption/">阅读全文 &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -583,6 +584,14 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2012/05/09/migrate-from-vss-to-git/">迁移VSS版本库到Git</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/05/03/git-server-based-on-gitstack/">基于GitStack搭建Git中心服务器</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2012/05/02/binary-compatibility/">库的可扩展性与二进制兼容性</a>
       </li>
     
@@ -594,19 +603,11 @@
         <a href="/blog/2012/04/28/git-command-note/">Git常用命令的使用情景</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2012/04/21/learn-git-command/">Git学习笔记</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/04/11/x64-filter-porting/">x64 filter移植笔记</a>
-      </li>
-    
   </ul>
 </section>
 <section>
   <h1>Tag Cloud</h1>
-    <span id="tag-cloud"><a href='/blog/categories/boost' style='font-size: 110.0%'>Boost(1)</a> <a href='/blog/categories/c-' style='font-size: 160.0%'>C++(6)</a> <a href='/blog/categories/closed-caption' style='font-size: 110.0%'>Closed caption(1)</a> <a href='/blog/categories/design' style='font-size: 110.0%'>Design(1)</a> <a href='/blog/categories/dtvcc' style='font-size: 110.0%'>Dtvcc(1)</a> <a href='/blog/categories/git' style='font-size: 130.0%'>Git(3)</a> <a href='/blog/categories/log' style='font-size: 110.0%'>Log(1)</a> <a href='/blog/categories/markdown' style='font-size: 110.0%'>Markdown(1)</a> <a href='/blog/categories/octopress' style='font-size: 120.0%'>Octopress(2)</a> <a href='/blog/categories/thinking' style='font-size: 110.0%'>Thinking(1)</a> <a href='/blog/categories/vs2005' style='font-size: 120.0%'>Vs2005(2)</a> <a href='/blog/categories/x64' style='font-size: 130.0%'>X64(3)</a> </span>
+    <span id="tag-cloud"><a href='/blog/categories/boost' style='font-size: 110.0%'>Boost(1)</a> <a href='/blog/categories/c-' style='font-size: 160.0%'>C++(6)</a> <a href='/blog/categories/closed-caption' style='font-size: 110.0%'>Closed caption(1)</a> <a href='/blog/categories/design' style='font-size: 110.0%'>Design(1)</a> <a href='/blog/categories/dtvcc' style='font-size: 110.0%'>Dtvcc(1)</a> <a href='/blog/categories/git' style='font-size: 150.0%'>Git(5)</a> <a href='/blog/categories/gitstack' style='font-size: 110.0%'>Gitstack(1)</a> <a href='/blog/categories/log' style='font-size: 110.0%'>Log(1)</a> <a href='/blog/categories/markdown' style='font-size: 110.0%'>Markdown(1)</a> <a href='/blog/categories/octopress' style='font-size: 120.0%'>Octopress(2)</a> <a href='/blog/categories/thinking' style='font-size: 110.0%'>Thinking(1)</a> <a href='/blog/categories/vs2005' style='font-size: 120.0%'>Vs2005(2)</a> <a href='/blog/categories/vss' style='font-size: 110.0%'>Vss(1)</a> <a href='/blog/categories/vss2git' style='font-size: 110.0%'>Vss2git(1)</a> <a href='/blog/categories/x64' style='font-size: 130.0%'>X64(3)</a> </span>
 </section>
 <section>
   <h1>最新评论</h1>
