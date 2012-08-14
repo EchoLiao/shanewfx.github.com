@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: octopress | 思考的轨迹]]></title>
+  <title><![CDATA[Category: Octopress | 思考的轨迹]]></title>
   <link href="http://shanewfx.github.com/blog/categories/octopress/atom.xml" rel="self"/>
   <link href="http://shanewfx.github.com/"/>
-  <updated>2012-08-13T15:16:40+08:00</updated>
+  <updated>2012-08-14T10:01:46+08:00</updated>
   <id>http://shanewfx.github.com/</id>
   <author>
     <name><![CDATA[Shane]]></name>
@@ -14,193 +14,278 @@
 
   
   <entry>
-    <title type="html"><![CDATA[如何维护Github上博客]]></title>
-    <link href="http://shanewfx.github.com/blog/2012/02/16/clone-blog-from-github/"/>
-    <updated>2012-02-16T14:59:00+08:00</updated>
-    <id>http://shanewfx.github.com/blog/2012/02/16/clone-blog-from-github</id>
-    <content type="html"><![CDATA[<p>有了自己的独立博客，日常维护得全靠自己了。</p>
+    <title type="html"><![CDATA[Octopress主题改造]]></title>
+    <link href="http://shanewfx.github.com/blog/2012/08/13/improve-blog-theme/"/>
+    <updated>2012-08-13T21:38:00+08:00</updated>
+    <id>http://shanewfx.github.com/blog/2012/08/13/improve-blog-theme</id>
+    <content type="html"><![CDATA[<p>Octopress是一个非常不错的博客系统，具有很好的扩展性，默认也提供了一个很好的博客主题。</p>
 
-<p>有时，我们需要在不同电脑上对自己博客进行维护或者发表博文。</p>
-
-<p>如果要在一台陌生的电脑(如没有安装Git或者Ruby运行环境等)上进行博客维护，这种情况下, 我们除了需要根据<a href="http://shanewfx.github.com/blog/2012/02/16/bulid-blog-by-octopress/">上一篇文章</a>介绍的那样来安装必要的Git和Ruby运行环境，还需要从Github上克隆一份自己博客，以便进行维护。</p>
+<p>随着越来越多的人开始使用Octopress搭建自己的个人博客，网络上出现了很多外观基本相同的博客。
+虽然Octopress默认的主题设计的很简洁、美观，但为了打造一个属于自己的博客，还是希望能够做的更美观一些。
+当然，借此机会自己也能够学习一点Web前端设计方面的知识。</p>
 
 <!--more-->
 
 
-<p>下面以自己的博客为例，看看如何怎么做。</p>
+<p>Octopress支持SASS语法，改造Octopress主题基本是通过修改“sass\custom“下以scss为后缀名的文件来完成，大多数的改造是在_styles.scss这个文件中来实现。</p>
 
-<h4>从Github上Clone博客</h4>
+<h2>1. 为博客添加背景图片</h2>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>cd f:
-</span><span class='line'>cd blog
-</span><span class='line'>git clone git@github.com:shanewfx/shanewfx.github.com.git</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+<p>```
+html {
+  background: #555555 url("/images/wood.jpg");
+  //background: #555555;
+}</p>
 
-<h4>要从克隆下来的博客代码中checkout出"source分支"</h4>
+<p>body > div {
+  background-image: none;
+//background: #F5F5D5
+} //侧边栏</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>cd shanewfx.github.com
-</span><span class='line'>git checkout source</span></code></pre></td></tr></table></div></figure></notextile></div>
-这一步是必须的，否则会出现问题，看<a href="http://fancyoung.com/blog/octopress-study/">这里</a>。</p>
+<p>body > div > div { //文章内容
+  background-image: none;
+  //background: #F5F5D5;
+  //background: url("/images/textbg.jpg");
+}
+```</p>
 
-<h4>要重新设置本地博客与Github Page的关联</h4>
+<h2>2. 改造博客的Header区域</h2>
 
-<pre><code>rake setup_github_pages
+<p>```
+html {
+  body > header {</p>
+
+<pre><code>background: none;
+padding: 1.6em 0 1em 0;
+h1 {
+  @include text-shadow(0px 1px 0px #999, 0px 2px 0px #888, 0px 3px 0px #777, 0px 4px 0px #666, 0px 5px 0px #555, 0px 6px 0px #444, 0px 7px 0px #333, 0px 8px 7px #001135);
+}
+h2 {
+  margin-top: .5em;
+  display: none;
+}
 </code></pre>
 
-<p>根据提示输入: git@github.com:shanewfx/shanewfx.github.com.git</p>
+<p>  }
+}
+```</p>
 
-<p><strong>到这里，如果rake无法使用，说明octopress依赖的工具还没有被安装好，需要从github上clone一份octopress，并参考<a href="http://shanewfx.github.com/blog/2012/02/16/bulid-blog-by-octopress/">上篇</a>文章中安装octopress部分安装所需的工具。</strong></p>
+<h2>3. 改造导航栏</h2>
 
-<p><em>上述的设置完成后，除了删除了本地的博客文件夹，否则以后在本地就可以不用再进行设置，对博客的维护直接进行下面的操作即可。不过，在对博客维护前，最好要从Github上获得最新的博客内容，使用下面这个命令即可:</em>
-<code>git pull origin source</code></p>
+<p>```
+body > nav {
+  //background: url("/images/nav.jpg");
+  //background: #555555;
+  ul.main-navigation {</p>
 
-<h4>对博客进行维护，如修改配置、写博文等</h4>
+<pre><code>padding-left: 3px;
+</code></pre>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>rake new_post["test clone from github"]
-</span><span class='line'>rake generate
-</span><span class='line'>rake preview</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+<p>  }
+  ul.subscription {</p>
 
-<h4>更新博客至Github</h4>
+<pre><code>//display: none;
+</code></pre>
 
-<p><div><script src='https://gist.github.com/1863884.js?file='></script>
-<noscript><pre><code>rake deploy
-git add .
-git commit -am 'test clone'
-git push origin source</code></pre></noscript></div>
+<p>  }
+  a {</p>
+
+<pre><code>&amp;:hover {
+  color: hsl(209.01, 86.94%, 50.04%);
+  text-shadow:
+    hsl(209.01, 86.94%, 42.04%) 0px 0px 5px,
+    hsl(209.01, 86.94%, 42.04%) 0px 0px 7px,
+    hsl(209.01, 86.94%, 52.04%) 0px 0px 9px,
+    hsl(209.01, 86.94%, 52.04%) 0px 0px 11px,
+    hsl(0, 0%, 0%) 0 0 2px;
+
+}
+i {
+  color: hsl(209.01, 86.94%, 50.04%);
+  text-shadow:
+    hsl(209.01, 86.94%, 42.04%) 0px 0px 5px,
+    hsl(209.01, 86.94%, 42.04%) 0px 0px 7px,
+    hsl(209.01, 86.94%, 52.04%) 0px 0px 9px,
+    hsl(209.01, 86.94%, 52.04%) 0px 0px 11px,
+    hsl(0, 0%, 0%) 0 0 2px;
+}
+</code></pre>
+
+<p>  }
+}
+```</p>
+
+<h2>4. 倒圆角</h2>
+
+<p>```
+@media only screen and (min-width: 1040px) {
+  body > nav {</p>
+
+<pre><code>@include border-top-radius(.4em);
+</code></pre>
+
+<p>  }</p>
+
+<p>  body > footer {</p>
+
+<pre><code>@include border-bottom-radius(.4em);
+</code></pre>
+
+<p>  }
+}
+```</p>
+
+<h2>5. 给博客加上LOGO图片</h2>
+
+<p>```
+@media only screen and (min-width: 550px) {</p>
+
+<p>  body > header h1{</p>
+
+<pre><code>  background: url("/images/logo3.png") no-repeat 0 1px;
+  padding-left: 65px;
+</code></pre>
+
+<p>  }</p>
+
+<p>  body > header h2 { padding-left: 65px; }
+}
+```</p>
+
+<h2>6. 改造侧边栏</h2>
+
+<p>在”source_includes\asides“下创建侧边栏相关模块的html文件，修改博客根目录下的_config.yml文件，主要是default_asides、blog_index_asides、post_asides这几项。</p>
+
+<p><code>
+default_asides: [custom/asides/about.html, custom/asides/weibo.html, asides/recent_posts.html, custom/asides/category_cloud.html, custom/asides/recent_comment.html, custom/asides/blog_link.html, custom/asides/douban.html, custom/asides/license.html]
+blog_index_asides: [custom/asides/about.html, custom/asides/weibo.html, asides/recent_posts.html, custom/asides/category_cloud.html, custom/asides/recent_comment.html, custom/asides/blog_link.html, custom/asides/douban.html, custom/asides/license.html]
+post_asides: [custom/asides/about.html, custom/asides/weibo.html, asides/recent_posts.html, custom/asides/category_cloud.html, custom/asides/recent_comment.html, custom/asides/blog_link.html, custom/asides/douban.html, custom/asides/license.html]
+</code></p>
+
+<ul>
+<li>在custom/asides/about.html中添加About Me信息</li>
+</ul>
+
+
+<p><code>
+&lt;section&gt;
+  &lt;h1&gt;About Me&lt;/h1&gt;
+  &lt;p&gt;&lt;img src="http://shanewfx.github.com/images/blogImgs/about.jpg"&gt;&lt;/p&gt;
+  &lt;p&gt;C++程序员，在Windows上搞音视频开发4年有余&lt;/p&gt;
+  &lt;p&gt;爱电子产品，爱Google, 爱折腾&lt;/p&gt;
+  &lt;p&gt;喜欢开源的东西, 喜欢读书和思考, 喜欢做一些geek的事情/东西&lt;/p&gt;
+  &lt;p&gt;&lt;img src="http://shanewfx.github.com/images/myemail.png"  alt="shanewfx@gmail.com" /&gt;&lt;/p&gt;
+&lt;/section&gt;
+</code></p>
+
+<ul>
+<li>在custom/asides/weibo.html中添加新浪微博模块</li>
+</ul>
+
+
+<p><code>
+&lt;section&gt;
+  &lt;h1&gt;Sina围脖&lt;/h1&gt;
+  &lt;iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&amp;width=0&amp;height=550&amp;fansRow=2&amp;ptype=1&amp;speed=300&amp;skin=1&amp;isTitle=1&amp;noborder=1&amp;isWeibo=1&amp;isFans=0&amp;uid=1684299551&amp;verifier=e30813de&amp;dpc=1"&gt;&lt;/iframe&gt;
+&lt;/section&gt;
+</code></p>
+
+<p>其中，iframe中的代码是来自新浪微博中”账号->我的工具->微博秀“，可以做一些简单的设置，并自动产生出嵌入代码。</p>
+
+<ul>
+<li>在custom/asides/douban.html中添加豆瓣读书列表</li>
+</ul>
+
+
+<p>```
+
+<section></p>
+
+<h1>My Douban</h1>
+
+
+<div>
+<script type="text/javascript" src="http://www.douban.com/service/badge/shanewfx/?show=wishlist&amp;n=9&amp;columns=3&amp;hidelogo=yes&amp;cat=movie|book" ></script>
+</div>
+
+
+<p></section>
+
+```</p>
+
+<p>其中，div中的代码来自<a href="http://www.douban.com/service/badgemakerjs">豆瓣</a>。
+同时，要在_config.yml中添加douban_user: XXX (XXX为你的豆瓣用户名)。</p>
+
+<ul>
+<li>在custom/asides/blog_link.html中添加友情链接</li>
+</ul>
+
+
+<p>```
+<section>
+  <h1>大牛博客</h1>
+  <ul></p>
+
+<pre><code>&lt;li&gt;
+  &lt;a href="http://coolshell.cn/"&gt;酷壳CoolShell&lt;/a&gt;
+&lt;/li&gt;
+&lt;li&gt;
+  &lt;a href="http://mindhacks.cn/"&gt;刘未鹏MIND HACKS&lt;/a&gt;
+&lt;/li&gt;
+&lt;li&gt;
+  &lt;a href="http://blog.codingnow.com/"&gt;云风&lt;/a&gt;
+&lt;/li&gt;
+&lt;li&gt;
+  &lt;a href="http://www.cnblogs.com/Solstice/"&gt;陈硕&lt;/a&gt;
+&lt;/li&gt;
+</code></pre>
+
+<p>  </ul>
+</section>
+```</p>
+
+<ul>
+<li>在custom/asides/recent_comment.html中添加Disqus评论</li>
+</ul>
+
+
+<p><code>
+&lt;section&gt;
+  &lt;h1&gt;最新评论&lt;/h1&gt;
+  &lt;script type="text/javascript" src="http://shanewfx.disqus.com/recent_comments_widget.js?num_items=5&amp;hide_avatars=0&amp;avatar_size=32&amp;excerpt_length=200"&gt;&lt;/script&gt;
+&lt;/section&gt;
+</code>
+其中，script中的代码由Disqus产生。
+同时，需要修改_config.yml中Disqus的相关参数:
+disqus_short_name: XXX (XXX为你的Disqus用户名)
+disqus_show_comment_count: true</p>
+
+<p>增加文章的评论需要将该文章对应的markdown文件开始部分中的comments设置为true（冒号后需有一个空格）。</p>
+
+<h2>7. 增加一键分享</h2>
+
+<p>我目前使用的是<a href="http://www.bshare.cn/">bshare</a>。</p>
+
+<p>在_config.yml中增加bshare: true。
+在“source_includes\post”下的sharing.html中增加如下代码：</p>
+
+<p>```
 </p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[搭Blog 学Git]]></title>
-    <link href="http://shanewfx.github.com/blog/2012/02/16/bulid-blog-by-octopress/"/>
-    <updated>2012-02-16T14:45:00+08:00</updated>
-    <id>http://shanewfx.github.com/blog/2012/02/16/bulid-blog-by-octopress</id>
-    <content type="html"><![CDATA[<p>想要有一个自己的独立博客是很久之前的事。</p>
 
-<p>以前也在其他网站上写过自己的博客，但总觉得用的不顺手，感觉少了归属感，最主要是提供的界面感觉都不怎么好。</p>
-
-<p>最近想学学<strong>Git</strong>，知道了<strong>Github</strong>，开始以为就是个代码仓库，后来才发现还提供了page服务，可以用来在上面搭建自己的<strong>独立博客</strong>。</p>
-
-<p>在Github上搭建博客可以利用<a href="https://github.com/mojombo/jekyll/wiki">Jekyll</a>或者<a href="http://octopress.org/">Octopress</a>，Octopress是在Jekyll上建立起来的，即使没有网站设计经验的人也能够快速搭建起自己的博客。</p>
-
-<p>Jekyll和Octopress都是利用<strong>Ruby</strong>实现的，因此在搭建自己博客的过程中难免要接触到一些Ruby的东西，嗯，这说不定也是一个让自己开始了解Ruby的契机。</p>
-
-<p>整个博客的内容和设置都是通过Git进行版本管理的，其中当然需要了解一些基本的Git操作，其实也没有几个常用的命令。</p>
-
-<!--more-->
-
-
-<p>由于我平时的工作环境都是在Windows上，所以这次搭建博客也在Windows上完成的(我使用的OS是Windows XP)。</p>
-
-<p>下面是我用Octopress搭建博客的过程:</p>
-
-<h2>安装和设置Git</h2>
-
-<p>下载<a href="http://code.google.com/p/msysgit/">Git for Windows</a>，安装完成后就可以在本地使用Git了，但要将内容放到Github上，必须先在Github上注册个账户，然后在本机使用Git创建SSH Key。</p>
-
-<p>在Git Bash上输入命令:</p>
-
-<pre><code>ssh-keygen -C "username@email.com" -t rsa
+<pre><code>&lt;a class="bshareDiv" href="http://www.bshare.cn/share"&gt;Sharing&lt;/a&gt;&lt;script type="text/javascript" charset="utf-8" src="http://static.bshare.cn/b/buttonLite.js#uuid=25fcdf85-62f9-400e-b053-627f102edf5a&amp;amp;style=999&amp;amp;img=http%3A%2F%2Fstatic.bshare.cn%2Fimages%2Fbuttons%2Fbox-shareTo-zh.gif&amp;amp;w=147&amp;amp;h=21"&gt;&lt;/script&gt;
 </code></pre>
 
-<p>Note: username@email.com需要更换成你自己的在Github上注册的Email地址</p>
+<p>
+```
+上述的代码由bshare产生，可以自己选择所需的外观。
+这样，在每一篇文章的最下方会出现一个分享的小工具。</p>
 
-<p>这样会在用户目录(C:\Documents and Settings\UserName)下产生一个.ssh文件夹，里面为对应的SSH Keys，其中id_rsa.pub是Github需要的SSH公钥文件。</p>
+<h2>8. 添加标签云</h2>
 
-<p>在Github的Account Settings里选择SSH Keys，在其中将id_rsa.pub文件里内容拷贝至
-其中的Key里。</p>
+<p>这部分需要第三方的plugin支持，目前我还没有解决中文标签在上传到github上连接出错的问题，在本地是OK的。
+具体可参看<a href="http://tinyxd.me/blog/2012/06/25/octopress-add-tag-cloud/">这篇文章</a>。</p>
 
-<p>这样以后就可以直接使用Git和GitHub了。</p>
-
-<h2>安装Ruby环境</h2>
-
-<p>下载<a href="http://rubyforge.org/frs/?group_id=167">RubyInstaller</a>和<a href="https://github.com/oneclick/rubyinstaller/downloads/">DevKit</a>。</p>
-
-<p>Octopress需要的Ruby版本为1.9.2，所以选rubyinstaller-1.9.2-p290.exe，DevKit-tdm-32-4.5.2-20111229-1559-sfx.exe。</p>
-
-<p>先安装RubyInstaller，然后解压缩DevKit(路径中不能有中文)。</p>
-
-<p>在"Start Command Prompt with Ruby"命令行中进入DevKit解压缩的目录，然后运行以下命令:</p>
-
-<pre><code>ruby dk.rb init
-ruby dk.rb install
-gem install rdiscount --platform=ruby
-</code></pre>
-
-<p>如果安装成功，就可以使用一些Ruby的工具了，也为后面搭建博客提供了基础环境。</p>
-
-<h2>安装Octopress</h2>
-
-<p>先通过Git从Github上克隆一份Octopress</p>
-
-<pre><code>git clone git://github.com/imathis/octopress.git octopress
-</code></pre>
-
-<p>然后安装一些依赖的工具</p>
-
-<pre><code>cd octopress
-ruby --version # Should report Ruby 1.9.2
-gem install bundler
-bundle install
-</code></pre>
-
-<p>安装Octopress默认的Theme</p>
-
-<pre><code>rake install
-</code></pre>
-
-<h2>配置Octopress</h2>
-
-<p>通过修改_config.yml来配置博客，具体可以在<a href="https://github.com/shanewfx/shanewfx.github.com">我的Github</a>上查看具体的配置内容。</p>
-
-<h2>开始写博文</h2>
-
-<p>通过<code>rake new_post["title"]</code>来在<strong>source/_post</strong>下创建一个新的Post，文件名如下面的格式:<strong>2012-02-16-title.markdown</strong>。</p>
-
-<p>然后可以用VIM打开该文件，并在其中输入/编辑文章内容。</p>
-
-<p>写文章时，可以使用<a href="http://daringfireball.net/projects/markdown/">Markdown</a>和<a href="http://octopress.org/docs/blogging/plugins/">Octopress Plugins</a>来对内容进行格式排版。</p>
-
-<h2>预览效果</h2>
-
-<p>在修改设置或者写完文章后，想看看具体效果，可以通过如下命令来完成:</p>
-
-<pre><code>rake generate
-rake preview
-</code></pre>
-
-<p>然后在浏览器中打开http://localhost:4000/来看一看效果。</p>
-
-<h2>将博客部署到Github上</h2>
-
-<p>在预览的效果符合自己的预期后，就可以通过如下命令将内容部署到Github上了。</p>
-
-<p>第一次部署前需要先要在Github上创建一个<strong>username.github.com</strong>的repository，
-然后通过<code>rake setup_github_pages</code>将自己的Blog与上述的repository关联起来。
-在其过程中根据提示输入<strong>username.github.com</strong>。</p>
-
-<p>然后就可以通过下面的命令来部署自己的博客内容至Github了:</p>
-
-<pre><code>rake deploy
-git status
-git add .
-git commit -a -m 'comment'
-git push origin source
-</code></pre>
-
-<h2>开始浏览自己的博客</h2>
-
-<p>在浏览器的地址栏中输入<strong>username.github.com</strong>，打开的网站就是自己的博客了，此刻一个独立博客就如此问世了!</p>
-
-<p>以后就可以享受这种以Geek方式来写博客的生活了!</p>
+<p>（完）</p>
 ]]></content>
   </entry>
   
