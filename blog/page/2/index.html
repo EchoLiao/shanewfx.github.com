@@ -9,7 +9,7 @@
   <meta name="author" content="Shane">
 
   
-  <meta name="description" content="对于程序员来说，debug是再正常不过的事。 在遇到问题时，通过分析程序的产生的Log文件来查找和验证问题发生的原因。 下面是一个简单的log tool，可以满足一般的log需求。 代码已经放到Github上了，需要的可到这里下载。 ">
+  <meta name="description" content="64位filter开发工具为VS2005，原来使用VC6开发的filter要转换到VS2005下。 32位的filter移植到x64平台上，对于没有汇编的filter，工作比较简单，主要就是编译选项的设置和修改指针与整形数相互强制转换的地方，以及部分数据类型不匹配等。 ">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -78,6 +78,98 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/04/11/x64-filter-porting/">X64 Filter移植笔记</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-04-11T17:53:00+08:00" pubdate data-updated="true">Apr 11<span>th</span>, 2012</time>
+        
+         | <a href="/blog/2012/04/11/x64-filter-porting/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>64位filter开发工具为VS2005，原来使用VC6开发的filter要转换到VS2005下。</p>
+
+<p>32位的filter移植到x64平台上，对于没有汇编的filter，工作比较简单，主要就是编译选项的设置和修改指针与整形数相互强制转换的地方，以及部分数据类型不匹配等。</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2012/04/11/x64-filter-porting/">阅读全文 &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/03/26/vs2005-64bit-programming/">VS2005 64-bit Programming Note</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-03-26T17:47:00+08:00" pubdate data-updated="true">Mar 26<span>th</span>, 2012</time>
+        
+         | <a href="/blog/2012/03/26/vs2005-64bit-programming/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>最近接到的任务是将32位的directshow filter移植到64位平台下，因此，借此机会学习了一点关于64位编程方面的内容。</p>
+
+<p>由于平时的开发环境是Windows + VS2005，所以，下面的内容也主要是讨论VS2005下64位编程的一些主要事项。不过，对于其他平台下的64位编程也有参考价值。</p>
+
+<p>之前已经讲过如何搭建VS2005下64位编程环境，看<a href="http://shanewfx.github.com/blog/2012/03/18/64bit-programming/">这里</a>。</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2012/03/26/vs2005-64bit-programming/">阅读全文 &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -440,6 +532,14 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2012/09/03/analyze-log-file-based-on-python/">使用Python图形化分析大Log文件</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/09/01/learning-regex/">正则表达式初学笔记</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2012/08/13/improve-blog-theme/">Octopress主题改造</a>
       </li>
     
@@ -451,19 +551,11 @@
         <a href="/blog/2012/05/09/migrate-from-vss-to-git/">迁移VSS版本库到Git</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2012/05/03/git-server-based-on-gitstack/">基于GitStack搭建Git中心服务器</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/05/02/binary-compatibility/">库的可扩展性与二进制兼容性</a>
-      </li>
-    
   </ul>
 </section>
 <section>
   <h1>Category Cloud</h1>
-    <span id="tag-cloud"><a href='/blog/categories/boost' style='font-size: 110.0%'>Boost(1)</a> <a href='/blog/categories/c-' style='font-size: 160.0%'>C++(6)</a> <a href='/blog/categories/closed-caption' style='font-size: 110.0%'>Closed caption(1)</a> <a href='/blog/categories/design' style='font-size: 110.0%'>Design(1)</a> <a href='/blog/categories/dtvcc' style='font-size: 110.0%'>Dtvcc(1)</a> <a href='/blog/categories/freesoftware' style='font-size: 110.0%'>Freesoftware(1)</a> <a href='/blog/categories/git' style='font-size: 150.0%'>Git(5)</a> <a href='/blog/categories/gitstack' style='font-size: 110.0%'>Gitstack(1)</a> <a href='/blog/categories/log' style='font-size: 110.0%'>Log(1)</a> <a href='/blog/categories/markdown' style='font-size: 110.0%'>Markdown(1)</a> <a href='/blog/categories/notepad-' style='font-size: 110.0%'>Notepad++(1)</a> <a href='/blog/categories/octopress' style='font-size: 120.0%'>Octopress(2)</a> <a href='/blog/categories/octopress' style='font-size: 110.0%'>Octopress(1)</a> <a href='/blog/categories/thinking' style='font-size: 110.0%'>Thinking(1)</a> <a href='/blog/categories/vs2005' style='font-size: 120.0%'>Vs2005(2)</a> <a href='/blog/categories/vss' style='font-size: 110.0%'>Vss(1)</a> <a href='/blog/categories/vss2git' style='font-size: 110.0%'>Vss2git(1)</a> <a href='/blog/categories/x64' style='font-size: 130.0%'>X64(3)</a> <a href='/blog/categories/开源软件' style='font-size: 110.0%'>开源软件(1)</a> </span>
+    <span id="tag-cloud"><a href='/blog/categories/boost' style='font-size: 110.0%'>Boost(1)</a> <a href='/blog/categories/c-' style='font-size: 160.0%'>C++(6)</a> <a href='/blog/categories/closed-caption' style='font-size: 110.0%'>Closed caption(1)</a> <a href='/blog/categories/design' style='font-size: 110.0%'>Design(1)</a> <a href='/blog/categories/dtvcc' style='font-size: 110.0%'>Dtvcc(1)</a> <a href='/blog/categories/freesoftware' style='font-size: 110.0%'>Freesoftware(1)</a> <a href='/blog/categories/git' style='font-size: 150.0%'>Git(5)</a> <a href='/blog/categories/gitstack' style='font-size: 110.0%'>Gitstack(1)</a> <a href='/blog/categories/log' style='font-size: 110.0%'>Log(1)</a> <a href='/blog/categories/markdown' style='font-size: 110.0%'>Markdown(1)</a> <a href='/blog/categories/matplotlib' style='font-size: 110.0%'>Matplotlib(1)</a> <a href='/blog/categories/notepad-' style='font-size: 110.0%'>Notepad++(1)</a> <a href='/blog/categories/octopress' style='font-size: 120.0%'>Octopress(2)</a> <a href='/blog/categories/octopress' style='font-size: 110.0%'>Octopress(1)</a> <a href='/blog/categories/python' style='font-size: 120.0%'>Python(2)</a> <a href='/blog/categories/regex' style='font-size: 120.0%'>Regex(2)</a> <a href='/blog/categories/sed' style='font-size: 110.0%'>Sed(1)</a> <a href='/blog/categories/thinking' style='font-size: 110.0%'>Thinking(1)</a> <a href='/blog/categories/vs2005' style='font-size: 120.0%'>Vs2005(2)</a> <a href='/blog/categories/vss' style='font-size: 110.0%'>Vss(1)</a> <a href='/blog/categories/vss2git' style='font-size: 110.0%'>Vss2git(1)</a> <a href='/blog/categories/x64' style='font-size: 130.0%'>X64(3)</a> <a href='/blog/categories/开源软件' style='font-size: 110.0%'>开源软件(1)</a> </span>
 </section>
 <section>
   <h1>最新评论</h1>

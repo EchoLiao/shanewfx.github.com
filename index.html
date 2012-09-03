@@ -9,8 +9,8 @@
   <meta name="author" content="Shane">
 
   
-  <meta name="description" content="Octopress是一个非常不错的博客系统，具有很好的扩展性，默认也提供了一个很好的博客主题。 随着越来越多的人开始使用Octopress搭建自己的个人博客，网络上出现了很多外观基本相同的博客。
-虽然Octopress默认的主题设计的很简洁、美观，但为了打造一个属于自己的博客， &hellip;">
+  <meta name="description" content="最近因为项目需要经常分析数据量很大的Log文件，以往靠手工目测的分析方法已不太可能快速分析和定位问题。 由于和我一起做这个项目的同事，会使用Python，编写的Python脚本能够将Log中的相关数据以图形的方式显示出来，这样就便于我们快速检测出是否输入、输出有异常情况发生。
+这样， &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +79,112 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/09/03/analyze-log-file-based-on-python/">使用Python图形化分析大Log文件</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-09-03T14:14:00+08:00" pubdate data-updated="true">Sep 3<span>rd</span>, 2012</time>
+        
+         | <a href="/blog/2012/09/03/analyze-log-file-based-on-python/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>最近因为项目需要经常分析数据量很大的Log文件，以往靠手工目测的分析方法已不太可能快速分析和定位问题。</p>
+
+<p>由于和我一起做这个项目的同事，会使用Python，编写的Python脚本能够将Log中的相关数据以图形的方式显示出来，这样就便于我们快速检测出是否输入、输出有异常情况发生。
+这样，也就加快了解决问题的效率。</p>
+
+<p>为此，在这里简要记录一下具体的方法，以便以后在需要的时候能够做参考。</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2012/09/03/analyze-log-file-based-on-python/">阅读全文 &rarr;</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/09/01/learning-regex/">正则表达式初学笔记</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-09-01T13:43:00+08:00" pubdate data-updated="true">Sep 1<span>st</span>, 2012</time>
+        
+         | <a href="/blog/2012/09/01/learning-regex/#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>最近一直在做MPEG2 TS-Mux，在开发调试的过程中有大量的log数据需要分析，特别是长时间测试，log文件往往会达到几百兆。</p>
+
+<p>这时遇到问题，要自己逐行去分析log定位问题往往是不太现实的事情。</p>
+
+<p>为了提高log文件分析的效率，我们利用Python编写分析log的脚本，每个脚本分析log文件中一类信息，如从前端Encoder中接受到的PTS，分析PTS是否有错误或跳变等情况。</p>
+
+<p>为了从原始的log文件中提取出我们关心的log部分，使用了一个命令行工具<a href="http://gnuwin32.sourceforge.net/packages/sed.htm">Sed</a>。</p>
+
+<p>Sed(streams editor)的具体使用方法可参考这篇文章<a href="http://blog.csdn.net/cxqdong/article/details/2007884">sed命令+正则表达式</a>。</p>
+
+<p>在一个数据量很大的文本中要查找出所有符合特定规则的文本，使用文本编辑器中简单查找功能往往很难达到要求。</p>
+
+<p>不过现在的文本编辑器也越来越强大，我熟悉的如VIM、Notepad++、UltraEdit等都是支持使用<a href="http://deerchao.net/tutorials/regex/regex.htm">正则表达式</a>来完成复杂的、自定义规则的文本查找功能。
+上述的Sed也是使用正则表达式来实现强大的文本查找功能。</p>
+
+<p>下面将会简单介绍一些关于正则表达式的知识，以后有时间会写一篇关于如何使用Python和matplotlib库来分析log数据并图形化显示分析结果的文章。</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/2012/09/01/learning-regex/">阅读全文 &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -468,98 +574,6 @@
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/04/11/x64-filter-porting/">X64 Filter移植笔记</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-04-11T17:53:00+08:00" pubdate data-updated="true">Apr 11<span>th</span>, 2012</time>
-        
-         | <a href="/blog/2012/04/11/x64-filter-porting/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>64位filter开发工具为VS2005，原来使用VC6开发的filter要转换到VS2005下。</p>
-
-<p>32位的filter移植到x64平台上，对于没有汇编的filter，工作比较简单，主要就是编译选项的设置和修改指针与整形数相互强制转换的地方，以及部分数据类型不匹配等。</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2012/04/11/x64-filter-porting/">阅读全文 &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/03/26/vs2005-64bit-programming/">VS2005 64-bit Programming Note</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2012-03-26T17:47:00+08:00" pubdate data-updated="true">Mar 26<span>th</span>, 2012</time>
-        
-         | <a href="/blog/2012/03/26/vs2005-64bit-programming/#disqus_thread">Comments</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>最近接到的任务是将32位的directshow filter移植到64位平台下，因此，借此机会学习了一点关于64位编程方面的内容。</p>
-
-<p>由于平时的开发环境是Windows + VS2005，所以，下面的内容也主要是讨论VS2005下64位编程的一些主要事项。不过，对于其他平台下的64位编程也有参考价值。</p>
-
-<p>之前已经讲过如何搭建VS2005下64位编程环境，看<a href="http://shanewfx.github.com/blog/2012/03/18/64bit-programming/">这里</a>。</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2012/03/26/vs2005-64bit-programming/">阅读全文 &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/2/">&larr; Older</a>
@@ -588,6 +602,14 @@
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2012/09/03/analyze-log-file-based-on-python/">使用Python图形化分析大Log文件</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/09/01/learning-regex/">正则表达式初学笔记</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2012/08/13/improve-blog-theme/">Octopress主题改造</a>
       </li>
     
@@ -599,19 +621,11 @@
         <a href="/blog/2012/05/09/migrate-from-vss-to-git/">迁移VSS版本库到Git</a>
       </li>
     
-      <li class="post">
-        <a href="/blog/2012/05/03/git-server-based-on-gitstack/">基于GitStack搭建Git中心服务器</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/05/02/binary-compatibility/">库的可扩展性与二进制兼容性</a>
-      </li>
-    
   </ul>
 </section>
 <section>
   <h1>Category Cloud</h1>
-    <span id="tag-cloud"><a href='/blog/categories/boost' style='font-size: 110.0%'>Boost(1)</a> <a href='/blog/categories/c-' style='font-size: 160.0%'>C++(6)</a> <a href='/blog/categories/closed-caption' style='font-size: 110.0%'>Closed caption(1)</a> <a href='/blog/categories/design' style='font-size: 110.0%'>Design(1)</a> <a href='/blog/categories/dtvcc' style='font-size: 110.0%'>Dtvcc(1)</a> <a href='/blog/categories/freesoftware' style='font-size: 110.0%'>Freesoftware(1)</a> <a href='/blog/categories/git' style='font-size: 150.0%'>Git(5)</a> <a href='/blog/categories/gitstack' style='font-size: 110.0%'>Gitstack(1)</a> <a href='/blog/categories/log' style='font-size: 110.0%'>Log(1)</a> <a href='/blog/categories/markdown' style='font-size: 110.0%'>Markdown(1)</a> <a href='/blog/categories/notepad-' style='font-size: 110.0%'>Notepad++(1)</a> <a href='/blog/categories/octopress' style='font-size: 120.0%'>Octopress(2)</a> <a href='/blog/categories/octopress' style='font-size: 110.0%'>Octopress(1)</a> <a href='/blog/categories/thinking' style='font-size: 110.0%'>Thinking(1)</a> <a href='/blog/categories/vs2005' style='font-size: 120.0%'>Vs2005(2)</a> <a href='/blog/categories/vss' style='font-size: 110.0%'>Vss(1)</a> <a href='/blog/categories/vss2git' style='font-size: 110.0%'>Vss2git(1)</a> <a href='/blog/categories/x64' style='font-size: 130.0%'>X64(3)</a> <a href='/blog/categories/开源软件' style='font-size: 110.0%'>开源软件(1)</a> </span>
+    <span id="tag-cloud"><a href='/blog/categories/boost' style='font-size: 110.0%'>Boost(1)</a> <a href='/blog/categories/c-' style='font-size: 160.0%'>C++(6)</a> <a href='/blog/categories/closed-caption' style='font-size: 110.0%'>Closed caption(1)</a> <a href='/blog/categories/design' style='font-size: 110.0%'>Design(1)</a> <a href='/blog/categories/dtvcc' style='font-size: 110.0%'>Dtvcc(1)</a> <a href='/blog/categories/freesoftware' style='font-size: 110.0%'>Freesoftware(1)</a> <a href='/blog/categories/git' style='font-size: 150.0%'>Git(5)</a> <a href='/blog/categories/gitstack' style='font-size: 110.0%'>Gitstack(1)</a> <a href='/blog/categories/log' style='font-size: 110.0%'>Log(1)</a> <a href='/blog/categories/markdown' style='font-size: 110.0%'>Markdown(1)</a> <a href='/blog/categories/matplotlib' style='font-size: 110.0%'>Matplotlib(1)</a> <a href='/blog/categories/notepad-' style='font-size: 110.0%'>Notepad++(1)</a> <a href='/blog/categories/octopress' style='font-size: 120.0%'>Octopress(2)</a> <a href='/blog/categories/octopress' style='font-size: 110.0%'>Octopress(1)</a> <a href='/blog/categories/python' style='font-size: 120.0%'>Python(2)</a> <a href='/blog/categories/regex' style='font-size: 120.0%'>Regex(2)</a> <a href='/blog/categories/sed' style='font-size: 110.0%'>Sed(1)</a> <a href='/blog/categories/thinking' style='font-size: 110.0%'>Thinking(1)</a> <a href='/blog/categories/vs2005' style='font-size: 120.0%'>Vs2005(2)</a> <a href='/blog/categories/vss' style='font-size: 110.0%'>Vss(1)</a> <a href='/blog/categories/vss2git' style='font-size: 110.0%'>Vss2git(1)</a> <a href='/blog/categories/x64' style='font-size: 130.0%'>X64(3)</a> <a href='/blog/categories/开源软件' style='font-size: 110.0%'>开源软件(1)</a> </span>
 </section>
 <section>
   <h1>最新评论</h1>
