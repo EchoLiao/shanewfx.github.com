@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Matplotlib | 思考的轨迹]]></title>
   <link href="http://shanewfx.github.com/blog/categories/matplotlib/atom.xml" rel="self"/>
   <link href="http://shanewfx.github.com/"/>
-  <updated>2012-09-04T18:00:30+08:00</updated>
+  <updated>2012-09-05T11:56:46+08:00</updated>
   <id>http://shanewfx.github.com/</id>
   <author>
     <name><![CDATA[Shane]]></name>
@@ -33,7 +33,7 @@
 <p>需要的工具如下：</p>
 
 <ul>
-<li><p>python（版本是2.7.3，自带一个简单的IDE）（官网为什么会被墙？）</p></li>
+<li><p><a href="http://www.python.org/">Python</a>（版本是2.7.3，自带一个简单的IDE）</p></li>
 <li><p>数值运算库<a href="http://sourceforge.net/projects/numpy/files/NumPy/">numpy</a>，matplotlib依赖这个库</p></li>
 <li><p>类似matlab的图形库<a href="http://matplotlib.sourceforge.net/">matplotlib</a></p></li>
 <li><p>文本编辑工具<a href="http://gnuwin32.sourceforge.net/packages/sed.htm">sed</a></p></li>
