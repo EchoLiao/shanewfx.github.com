@@ -4,7 +4,7 @@
   <title><![CDATA[思考的轨迹]]></title>
   <link href="http://shanewfx.github.com/atom.xml" rel="self"/>
   <link href="http://shanewfx.github.com/"/>
-  <updated>2012-09-24T14:14:44+08:00</updated>
+  <updated>2012-10-09T17:04:14+08:00</updated>
   <id>http://shanewfx.github.com/</id>
   <author>
     <name><![CDATA[Shane]]></name>
@@ -12,6 +12,30 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[个人技术提升Roadmap]]></title>
+    <link href="http://shanewfx.github.com/blog/2012/10/09/my-technology-roadmap/"/>
+    <updated>2012-10-09T16:37:00+08:00</updated>
+    <id>http://shanewfx.github.com/blog/2012/10/09/my-technology-roadmap</id>
+    <content type="html"><![CDATA[<p>长假之后果然不在状态，今天抽空给自己未来的学习做了一个简单的规划，也算一个简单的总结和回顾。</p>
+
+<p>为了便于查看，特在<a href="http://tu.mindpin.com/">MindPin</a>上绘制了一张个人技术规划的思维导图。</p>
+
+<p><a href="http://www.flickr.com/photos/shanewfx/8070062706/" title="Flickr 上 shanewfx 的 技术Roadmap"><img src="http://farm9.staticflickr.com/8459/8070062706_8221e32965_b.jpg" width="792" height="1024" alt="技术Roadmap"></a></p>
+
+<p>如果图片不清晰的话，请移步<a href="http://tu.mindpin.com/mindmaps/54700">这里</a>直接查看原始文件。</p>
+
+<!--more-->
+
+
+<p>随便介绍一下<a href="http://tu.mindpin.com/">MindPin</a>，这是一个在线<a href="http://zh.wikipedia.org/zh-cn/%E5%BF%83%E6%99%BA%E5%9B%BE">思维导图</a>绘制工具。</p>
+
+<p>使用下来感觉还是蛮不错的，UI简洁、快捷键也随手、自动保存、支持多种格式导出。</p>
+
+<p>（完）</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[在Ubuntu中下载编译ffmpeg的过程]]></title>
@@ -3363,146 +3387,6 @@ Synchronized PES -> Data Group -> Caption Statement -> data_unit</p>
 <li><p>ABNT NBR 15608-3 (Chapter 5 / 14 / 22): 关于巴西Closed Caption在PMT及EIT上descriptor的定义和解释</p></li>
 </ul>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[用Markdown来写博客文章]]></title>
-    <link href="http://shanewfx.github.com/blog/2012/02/16/markdown-syntax/"/>
-    <updated>2012-02-16T15:27:00+08:00</updated>
-    <id>http://shanewfx.github.com/blog/2012/02/16/markdown-syntax</id>
-    <content type="html"><![CDATA[<p><strong>Octopress一大亮点是支持博客使用<a href="http://daringfireball.net/projects/markdown/syntax">Markdown</a>作为源文件语言。</strong></p>
-
-<p><strong>Markdown</strong>语言由于其<strong>简单</strong>，<strong>易读</strong>和<strong>清晰</strong>的脉络结构的特点，被许多网站采用，比如<strong>Github</strong>，<strong>Google Code</strong>，<strong>StackOverflow</strong>。</p>
-
-<p><strong>Markdown</strong>是一个很好的文档语言，可以写出很漂亮的文档出来。</p>
-
-<p>实际使用下来发现: <strong>用Markdown来写博客文章是一件很爽的事!</strong></p>
-
-<!-- more -->
-
-
-<p><a href="http://www.ituring.com.cn/article/details/775">Markdown基本语法</a>很简洁，也很好记。</p>
-
-<p>下面是<a href="http://daringfireball.net/projects/markdown/dingus">Dingus</a>支持的<strong>Markdown Syntax</strong>。</p>
-
-<div><script src='https://gist.github.com/2009731.js?file='></script>
-<noscript><pre><code>Markdown Syntax:
-
-
-1.Phrase Emphasis 斜体与加粗
-
-*italic*   **bold**
-_italic_   __bold__
-
-2.Links 超链接
-
-方法1 Inline:
-An [example](http://url.com/ &quot;Title&quot;)
-
-方法2 Reference-style labels (titles are optional):
-An [example][id]
-
-Then, anywhere else in the doc, define the link:
-[id]: http://example.com/  &quot;Title&quot;
-
-3.Images 插入图片
-
-方法1 Inline (titles are optional):
-![alt text](/path/img.jpg &quot;Title&quot;)
-
-方法2 Reference-style:
-![alt text][id]
-
-[id]: /url/to/img.jpg &quot;Title&quot;
-
-4.Headers 标题
-
-方法1 Setext-style:
-Header 1
-========
-
-Header 2
---------
-
-方法2 atx-style (closing #'s are optional):
-# Header 1 #
-
-## Header 2 ##
-
-###### Header 6
-
-5.Lists 列表
-
-有序列表 Ordered, without paragraphs:
-1.  Foo
-2.  Bar
-
-无序列表 Unordered, with paragraphs:
-*   A list item.
-
-    With multiple paragraphs.
-
-*   Bar
-
-You can nest them:
-*   Abacus
-    * answer
-*   Bubbles
-    1.  bunk
-    2.  bupkis
-        * BELITTLER
-    3. burper
-*   Cunning
-
-6.Blockquotes 块引用
-
-&gt; Email-style angle brackets
-&gt; are used for blockquotes.
-
-&gt; &gt; And, they can be nested.
-
-&gt; #### Headers in blockquotes
-&gt; 
-&gt; * You can quote a list.
-&gt; * Etc.
-
-7.Code Spans 代码段
-
-`&lt;code&gt;` spans are delimited by backticks.
-
-You can include literal backticks
-like `` `this` ``.
-
-Preformatted Code Blocks
-
-Indent every line of a code block by at least 4 spaces or 1 tab.
-This is a normal paragraph.
-
-    This is a preformatted
-    code block.
-
-8.Horizontal Rules 水平分割线
-
-Three or more dashes or asterisks:
----
-
-* * *
-
-- - - - 
-
-9.Manual Line Breaks 换行
-
-End a line with two or more spaces:
-Roses are red,   
-Violets are blue.</code></pre></noscript></div>
-
-
-<p>看一看实际的示例：<a href="http://dillinger.io/">dillinger</a></p>
-
-<p>要看本博客文章如何使用Markdown的，请看看<a href="https://github.com/shanewfx/shanewfx.github.com">博客的源代码</a>吧。</p>
-
-<p>另外需要了解的是，我们除了可以使用Markdown来写文章，而且可以使用Octopress提供的一些<a href="http://octopress.org/docs/blogging/plugins/">Plugins</a>来实现一些特殊的效果，具体请查看<a href="http://octopress.org/docs/blogging/plugins/">Octopress的官方文档</a>吧。</p>
 ]]></content>
   </entry>
   
