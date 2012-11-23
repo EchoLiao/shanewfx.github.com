@@ -93,6 +93,14 @@
         <lastmod>2012-10-09T16:58:06+08:00</lastmod>
     </url>
     <url>
+        <loc>http://shanewfx.github.com/blog/2012/10/12/software-design-principle/</loc>
+        <lastmod>2012-11-23T11:44:10+08:00</lastmod>
+    </url>
+    <url>
+        <loc>http://shanewfx.github.com/blog/2012/11/23/mfc-custom-control/</loc>
+        <lastmod>2012-11-23T12:18:23+08:00</lastmod>
+    </url>
+    <url>
         <loc>http://shanewfx.github.com/404.html</loc>
         <lastmod>2012-03-31T11:42:39+08:00</lastmod>
     </url>
@@ -102,7 +110,7 @@
     </url>
     <url>
         <loc>http://shanewfx.github.com/blog/archives/</loc>
-        <lastmod>2012-10-09T16:58:06+08:00</lastmod>
+        <lastmod>2012-11-23T12:18:23+08:00</lastmod>
     </url>
     <url>
         <loc>http://shanewfx.github.com/books/</loc>
@@ -118,6 +126,6 @@
     </url>
     <url>
         <loc>http://shanewfx.github.com/</loc>
-        <lastmod>2012-10-09T16:58:06+08:00</lastmod>
+        <lastmod>2012-11-23T12:18:23+08:00</lastmod>
     </url>
 </urlset>

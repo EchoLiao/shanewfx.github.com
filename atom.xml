@@ -4,7 +4,7 @@
   <title><![CDATA[思考的轨迹]]></title>
   <link href="http://shanewfx.github.com/atom.xml" rel="self"/>
   <link href="http://shanewfx.github.com/"/>
-  <updated>2012-10-09T17:04:14+08:00</updated>
+  <updated>2012-11-23T12:40:47+08:00</updated>
   <id>http://shanewfx.github.com/</id>
   <author>
     <name><![CDATA[Shane]]></name>
@@ -12,6 +12,254 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[使用MFC Custom Control实现界面的自绘]]></title>
+    <link href="http://shanewfx.github.com/blog/2012/11/23/mfc-custom-control/"/>
+    <updated>2012-11-23T11:45:00+08:00</updated>
+    <id>http://shanewfx.github.com/blog/2012/11/23/mfc-custom-control</id>
+    <content type="html"><![CDATA[<p>最近在做一个视频编辑的项目，其中界面部分有点复杂，负责这部分的同事使用了MFC的Custom Control来实现界面的自绘效果，目前DemoAP的初步效果已经出来，感觉还不错。</p>
+
+<p>因为工作以来基本没有接触过UI方面的编程，加之以前也没有使用过Custom Control，这次做一个简单学习和总结，以便后用。</p>
+
+<!--more-->
+
+
+<h5>1.创建MFC工程</h5>
+
+<p>在VS2005中创建一个基于Dialog的MFC工程，DemoUI；</p>
+
+<h5>2.添加CMyPad类</h5>
+
+<p>在DemoUI上右击选择Add->Class，在类向导中选择MFC Class，
+再点击Add，在Class Name中填入类名，如CMyPad，选择Base class为CWnd，点击Finish，
+这时自动生成MyPad.h和MyPad.cpp。</p>
+
+<h5>3.打开DemoUI.rc，双击Dialog下的IDD_DEMOUI_DIALOG，进入对话框窗口设计界面</h5>
+
+<h5>4.在对话框上加入一个Custom Control控件</h5>
+
+<h5>5.设置Custom Control的属性</h5>
+
+<p>设置如下属性，其他属性使用默认即可：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ID ： IDC_CUSTOM_PAD
+</span><span class='line'>Class: MyDrawPad</span></code></pre></td></tr></table></div></figure>
+
+
+<p>其中，这里的MyDrawPad必须与注册窗口时使用的类名一致，否则编译可通过，但无法运行。</p>
+
+<h5>6.在CMyPad类中添加一个用于注册窗口的成员函数BOOL RegisterWndClass()</h5>
+
+<p>具体实现为：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>BOOL CMyPad :: RegisterWndClass()
+</span><span class='line'>{
+</span><span class='line'>       WNDCLASS windowclass ;
+</span><span class='line'>       HINSTANCE hInst = AfxGetInstanceHandle ();
+</span><span class='line'>
+</span><span class='line'>       //Check weather the class is registerd already
+</span><span class='line'>       if (!(::GetClassInfo ( hInst, MYWNDCLASS , &windowclass )))
+</span><span class='line'>       {
+</span><span class='line'>             //If not then we have to register the new class
+</span><span class='line'>             windowclass .style = CS_DBLCLKS; // | CS_HREDRAW | CS_VREDRAW;
+</span><span class='line'>             windowclass .lpfnWndProc = :: DefWindowProc;
+</span><span class='line'>             windowclass .cbClsExtra = windowclass. cbWndExtra = 0;
+</span><span class='line'>             windowclass .hInstance = hInst;
+</span><span class='line'>             windowclass .hIcon = NULL;
+</span><span class='line'>             windowclass .hCursor = AfxGetApp ()->LoadStandardCursor ( IDC_ARROW);
+</span><span class='line'>             windowclass .hbrBackground = ::GetSysColorBrush (COLOR_WINDOW );
+</span><span class='line'>             windowclass .lpszMenuName = NULL;
+</span><span class='line'>             windowclass .lpszClassName = MYWNDCLASS;
+</span><span class='line'>
+</span><span class='line'>             if (!AfxRegisterClass (& windowclass))
+</span><span class='line'>             {
+</span><span class='line'>                   AfxThrowResourceException ();
+</span><span class='line'>                   return FALSE ;
+</span><span class='line'>             }
+</span><span class='line'>       }
+</span><span class='line'>
+</span><span class='line'>       return TRUE ;
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>其中，MYWNDCLASS是在MyPad.h中定义的宏：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>#define MYWNDCLASS  L "MyDrawPad"</span></code></pre></td></tr></table></div></figure>
+
+
+<p>(工程属性中设置为Unicode，API会调用对应的Unicode版本，因此字符串前需加上L)</p>
+
+<h5>7.在主对话框类CDemoUIDlg中关联自定义控件类CMyPad</h5>
+
+<p>首先在CDemoUIDlg类中添加一个成员：<code>CMyPad m_Pad</code> ;</p>
+
+<p>然后进行关联，方法有两种：</p>
+
+<ul>
+<li><p>在<code>CDemoUIDlg ::OnInitDialog</code>中关联：<code>m_Pad .SubclassDlgItem(IDC_CUSTOM_PAD, this)</code>;</p></li>
+<li><p>在<code>CDemoUIDlg ::DoDataExchange</code>中关联：<code>DDX_Control(pDX, IDC_CUSTOM_PAD, m_Pad)</code>;</p></li>
+</ul>
+
+
+<p>两种方法只能用其中一种，不可同时使用。</p>
+
+<h5>8.为CMyPad添加消息响应函数</h5>
+
+<p>在Class View中选择CMyPad，右击打开其属性界面，选择消息一栏，选择需要响应的消息，并增加对应的消息处理函数。</p>
+
+<p>如选择<code>WM_PAINT</code>，选择<code>&lt;Add&gt;OnPaint</code>，这样就在CMyPad中自动添加了响应WM_PAINT消息的处理函数OnPaint()。</p>
+
+<p>简单测试一下, OnPaint函数的实现如下：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>void CMyPad:: OnPaint ()
+</span><span class='line'>{
+</span><span class='line'>       CPaintDC dc ( this); // device context for painting
+</span><span class='line'>       // TODO: Add your message handler code here
+</span><span class='line'>       // Do not call CWnd::OnPaint() for painting messages
+</span><span class='line'>       dc .DrawText ( L"test123" , CRect(0,0,100,100), DT_LEFT );
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<h5>9.效果测试</h5>
+
+<p>编译运行，即可看到在Custom Control中绘制出&#8221;test123&#8221;字符。</p>
+
+<p>（完）</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[软件设计的几点思考和总结]]></title>
+    <link href="http://shanewfx.github.com/blog/2012/10/12/software-design-principle/"/>
+    <updated>2012-10-12T19:48:00+08:00</updated>
+    <id>http://shanewfx.github.com/blog/2012/10/12/software-design-principle</id>
+    <content type="html"><![CDATA[<p>软件设计是不易的，尤其要设计出结构良好、可靠性高、又不失可扩展性和可维护性的软件更是困难的事。</p>
+
+<p>随着项目的积累、经验的丰富，不同阶段，自己对设计的理解也是不一样的，就像看一本好书，每读一遍，对其中内容的理解往往也会不同一样。</p>
+
+<p>下面是自己对如何设计良好软件的一点理解：</p>
+
+<!--more-->
+
+
+<p></p>
+
+<p>1.模块/类要尽可能只做一件事，并且要把事做好（符合单一职责原则、高内聚低耦合），这样也有利于提高重用性（KISS原则、DRY原则）</p>
+
+<p>模块/类设计的注意点：</p>
+
+<ul>
+<li><p>模块所处层次是否分明[分层设计(横行划分)]，功能是否清晰[模块化设计(纵向划分)、正交设计]</p></li>
+<li><p>模块接口要仔细设计</p></li>
+</ul>
+
+
+<p>接口要提供哪些功能，接口函数/参数命名是否直达其意（命令查询分离原则），有什么限制，如何返回结果，是否易用，尽可能多从用户使用角度考虑接口的设计；</p>
+
+<p>接口设计要符合“接口隔离原则”，大而全的接口往往没有多个功能分类明确的接口要灵活、易用。</p>
+
+<ul>
+<li><p>信息隐藏要做好，模块的边界(接口)要清晰，用户对模块的了解要尽可能少（最少知识原则）</p></li>
+<li><p>模块内部实现要尽量符合“迪米特法则”和“契约式设计”</p></li>
+<li><p>只和必要的模块产生依赖，模块之间绝不可出现循环依赖</p></li>
+<li><p>一组功能相关的模块可放在一起，组成功能包，这样便于修改和维护（共同关闭原则）</p></li>
+</ul>
+
+
+<p>2.设计时，应权衡一下是否要考虑可扩展性(需求将来是否会变化，如果比较稳定则不用考虑，避免过度设计)</p>
+
+<p>如何设计来保证模块/函数具备一定的可扩展性（要符合开闭原则）？</p>
+
+<ul>
+<li><p>找出可能的变化，合理抽象（封装变化），提炼接口， 针对接口编程(依赖稳定的抽象/接口)， 不依赖具体的实现</p></li>
+<li><p>组合优先继承（模块之间的依赖优先考虑是否可采用组合，使用继承主要是以使用多态为目的[里氏替换原则/针对接口编程]）</p></li>
+<li><p>模块之间要正交（模块间功能要尽可能不重叠）</p></li>
+<li><p>高层模块和低层模块之间要符合&#8221;依赖倒置原则&#8221;和“好莱坞原则”</p></li>
+</ul>
+
+
+<p>高层模块提供低层模块所需的接口，高层模块实现时针对这些接口编程，不依赖低层的具体实现；</p>
+
+<p>而低层模块需要实现这些接口，实际运行时以多态的形式为高层模块提供功能（好莱坞原则）。</p>
+
+<p>3.层次是一种软件抽象，分层设计可提高软件的灵活性，很多设计手法，其本质都是在软件的结构中加入更多的层次。</p>
+
+<p>如对文件操作进行封装，提供一个文件操作类来代理文件操作请求，这样可屏蔽不同操作系统下文件操作API的不同，增加可移植性。</p>
+
+<p>但也要充分考虑到层次带来的复杂性，会增加对软件理解和维护的难度。</p>
+
+<p>因此，要努力控制层次在三层左右，否则宁愿牺牲一点抽象（软件设计是一个权衡和选择的过程）。</p>
+
+<p>另外，层次抽象要保持内在的一致性，一个层次内部应该只做自己应该做的事，而不要去做其他层应该做的事。</p>
+
+<p>如在设计DirectShow Filter时，应尽量把功能层次的模块与Filter层次分开，在Filter层次中只做DirectShow框架下filter应实现的功能，</p>
+
+<p>如媒体类型的协商、与其前端/后端filter的连接、Filter之间的数据流传递等，而不涉及具体功能逻辑部分的实现；</p>
+
+<p>同样，功能实现层也不应该依赖DirectShow框架(如数据的输出可用回调来实现解耦)。</p>
+
+<p>这样做的好处是，以后可单独提取出具体的功能模块，移植到其他非DirectShow框架中，即Filter层仅是一层壳而已。</p>
+
+<p>否则，这样的剥离将难以实现，同时也会因为层次边界的模糊而影响程序的可读性。</p>
+
+<p>4.代码实现时，要有良好的编码风格，且风格要统一，函数和变量命名要准确表达其意；</p>
+
+<p>逻辑实现要简洁利索，避免功能大而全的复杂函数，函数实现也要尽量符合KISS原则，只负责一件事；</p>
+
+<p>总之，要时刻考虑软件维护者的感受（说不定几个月、几年之后你就是软件的维护者呢），尽可能减少让人产生怪异的感觉。</p>
+
+<p>即尽一切方法提供程序的可读性。</p>
+
+<hr />
+
+<p>附上一份关于软件设计基本原则的思维导图，以便参考。</p>
+
+<p><a href="http://www.flickr.com/photos/shanewfx/8079555786/" title="Flickr 上 shanewfx 的 软件设计基本指导思想"><img src="http://farm9.staticflickr.com/8464/8079555786_e74017d4f8_b.jpg" width="970" height="1024" alt="软件设计基本指导思想"></a></p>
+
+<p>图片比较大，请移步<a href="http://tu.mindpin.com/mindmaps/54796">这里</a>直接查看原始文件。</p>
+
+<p>(完)</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[个人技术提升Roadmap]]></title>
@@ -3142,251 +3390,6 @@ POINTER_32、POINTER_64</p>
 
 
 <p>上述的应该是最基本的，要在64位平台中进行编程，还需要了解更多的这方面的知识。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Compile Boost v1.49.0]]></title>
-    <link href="http://shanewfx.github.com/blog/2012/03/17/compile-boost-v1-dot-49-dot-0/"/>
-    <updated>2012-03-17T21:15:00+08:00</updated>
-    <id>http://shanewfx.github.com/blog/2012/03/17/compile-boost-v1-dot-49-dot-0</id>
-    <content type="html"><![CDATA[<p>对C++程序员来说，Boost是一个非常有名的库，里面提供了很多强大的功能。</p>
-
-<p>不过，我之前一直没有使用和研究过Boost，最近看一些开源的代码中有使用Boost，感觉很不错，于是，今天抽一点时间先将Boost的使用环境先搭起来，后面慢慢学习。</p>
-
-<!--more-->
-
-
-<h2>编译Boost</h2>
-
-<ul>
-<li><p>先到<a href="http://www.boost.org/">Boost的官方网站</a>上下载最新的版本Boost v1.49.0, 我选择的是<a href="http://sourceforge.net/projects/boost/files/boost/1.49.0/">boost_1_49_0.7z</a>;</p></li>
-<li><p>将下载的boost_1_49_0.7z解压缩到D:\Program Files\boost_1_49_0中;</p></li>
-<li><p>为了自动编译Boost，编写了下面的Batch，将Batch代码拷贝到文本文件中，重新命名为为compile_boost_1_49_0.bat;</p></li>
-</ul>
-
-
-<div><script src='https://gist.github.com/2058696.js?file='></script>
-<noscript><pre><code>em @echo off
-
-rem 先编译bjam
-start bootstrap.bat
-
-rem 等待一分钟待bjam编译完成（如果电脑性能过差，可以设置等待时间更长一些）
-SET SLEEP=ping 127.0.0.1 -n
-%SLEEP% 60 &gt; nul
-
-rem 利用bjam编译boost库
-rem 在此，我们编译vs2005下的x86及x64共2类boost库文件
-
-rem 建立库文件夹
-rem vs2005 win32库文件夹
-md stage\lib\win32\vs8_0\
-
-rem vs2005 x64库文件夹
-md stage\lib\x64\vs8_0\
-
-
-rem ******************************************************************
-rem 先删除lib下所有文件（不删除文件夹）
-del stage\lib\*.* /Q
-
-rem 编译vs2005 win32库文件
-bjam --toolset=msvc-8.0 architecture=x86 --build-type=complete stage
-
-rem 拷贝至\stage\lib\win32\vs8_0
-copy stage\lib\*.* stage\lib\win32\vs8_0\*.* /Y
-rem ##################################################################
-
-rem ******************************************************************
-rem 先删除lib下所有文件（不删除文件夹）
-del stage\lib\*.* /Q
-
-rem 编译vs2008 x64库文件
-bjam --toolset=msvc-8.0 architecture=x86 address-model=64 --build-type=complete stage
-
-rem 拷贝至\stage\lib\x64\vs8_0
-copy stage\lib\*.* stage\lib\x64\vs8_0\*.* /Y
-rem ##################################################################
-
-rem 删除lib下所有文件（不删除文件夹）
-del stage\lib\*.* /Q</code></pre></noscript></div>
-
-
-<p>由于我使用的VS2005，所以使用了<code>--toolset=msvc-8.0</code>。</p>
-
-<p>如果使用的是其他版本的VS，则上述的代码要作一点小修改，具体就是：</p>
-
-<p>VS2008 -> <code>--toolset=msvc-9.0</code>     VS2010 -> <code>--toolset=msvc-10.0</code></p>
-
-<p>当然，lib的存放的路径也可以改动一下。</p>
-
-<ul>
-<li><p>将上面的compile_boost_1_49_0.bat文件拷贝到D:\Program Files\boost_1_49_0目录中;</p></li>
-<li><p>双击运行compile_boost_1_49_0.bat，这样就开始了漫长的自动编译过程，整个过程大概要2小时（编译了32位和64位的全部lib）;</p></li>
-<li><p>编译结束后，生成的Libs都在D:\Program Files\boost_1_49_0\stage\lib\win32\vs8_0和D:\Program Files\boost_1_49_0\stage\lib\x64\vs8_0两个文件夹下；</p></li>
-</ul>
-
-
-<p>到这里Boost编译的过程就结束了。</p>
-
-<h2>设置VS2005</h2>
-
-<ul>
-<li><p>在Tools->Options->Projects and Solutions->VC++ Directories中：</p>
-
-<pre><code>- Win32平台加入Include files和Library files的路径
-    - Include files: D:\Program Files\boost_1_49_0
-    - Library files: D:\Program Files\boost_1_49_0\stage\lib\win32\vs8_0
-
-- X64平台加入Include files和Library files的路径
-    - Include files: D:\Program Files\boost_1_49_0
-    - Library files: D:\Program Files\boost_1_49_0\stage\lib\x64\vs8_0
-</code></pre></li>
-<li><p>通过上述的设置，在VS2005中就可以正常使用Boost了。</p></li>
-</ul>
-
-
-<p><strong>相信此时你一定很激动，赶紧写个测试程序，来体验一下Boost的强大功能吧!</strong></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[ISDB-T/SBTVD-T Closed Caption]]></title>
-    <link href="http://shanewfx.github.com/blog/2012/03/07/isdb-t-slash-sbtvd-t-closed-caption/"/>
-    <updated>2012-03-07T16:40:00+08:00</updated>
-    <id>http://shanewfx.github.com/blog/2012/03/07/isdb-t-slash-sbtvd-t-closed-caption</id>
-    <content type="html"><![CDATA[<p><a href="http://en.wikipedia.org/wiki/Closed_captioning">Closed Caption</a>（可简称为CC）可以简单来看作为一种字幕，最初设计的目的是为了帮助有听力障碍的人理解电视节目的内容，即将节目中的Audio（背景音乐显示音乐符号）通过文字在屏幕上显示出来。</p>
-
-<p>目前，Closed Caption的标准主要有ATSC定义的608和708，日本ARIB STD-B24等，而巴西的数字电视标准SBTVD-T是在日本的ISDB-T标准基础上稍作修改而来，因此，巴西数字电视的Closed Caption标准也是采用了ARIB STD-B24。</p>
-
-<p>ARIB STD-B24定义的Closed Caption下面被简称为ARIB CC。</p>
-
-<!--more-->
-
-
-<p>ATSC CC与ARIB CC的数据传输区别在于:</p>
-
-<ul>
-<li>ATSC的CC数据是通过MPEG-2 Video中的User Data部分进行传输；</li>
-<li>ARIB的CC数据是在TS流中以独立的ES进行传输。</li>
-</ul>
-
-
-<p>下面将介绍ARIB STD-B24标准中Closed Caption的一些细节内容。</p>
-
-<h3>ARIB CC传输层</h3>
-
-<p>ARIB CC数据首先被打包为Synchronized PES（Independent PES），然后，Synchronized PES会继续被打包为PES packet中，该PES packet的stream id为0xBD，同时PES packet header中需要含有PTS，最后，该PES会被打包为TS packet，在TS中进行传输。</p>
-
-<p>如果TS流中含有Closed Caption，则在TS流的PMT和EIT中会有相应的descriptors进行描述。载有Closed Caption的ES流在PMT中的stream type值为0x06，因此，可通过在PMT表中查找stream type为0x06的Closed Caption ES对应的PID，从而，可从TS流中过滤出Closed Caption ES对应的TS packet。</p>
-
-<h3>ARIB CC Data的语法结构:</h3>
-
-<p>Synchronized PES -> Data Group -> Caption Management
-Synchronized PES -> Data Group -> Caption Statement -> data_unit</p>
-
-<p>Caption Management包含了Closed Caption的全局信息，并以一定的时间间隔来发送。另外，Caption Management中一般不会含有Closed Caption字符编码数据（没有包含data_unit）。</p>
-
-<p>Caption Statement是Closed Caption数据传输的主要载体。CC数据主要由Control Code（控制字）和Character Code（字符码）组成，其中，控制字规定了CC的字符集、显示位置及文本格式等信息，而通过字符码可以从指定的字符集中取得CC字符。Closed Caption的控制字和字符码都在data_unit中。</p>
-
-<h3>ARIB CC的控制字</h3>
-
-<p>ARIB CC的整个字符集被分为4个区域：C0、GL、C1、GR，其中C0和C1对应是Control Code，而GL和GR对应的则是CC当前使用的字符集。可以使用不同的控制字（LS0、LS1、LS1R、LS2、LS3、LS2R、LS3R、SS2、SS3）将不同的字符集(G0、G1、G2、G3)调用到GL和GR中，而G0、G1、G2、G3具体对应哪一个字符集则可以用ESC控制字来指明。</p>
-
-<p>除了C0和C1中的控制字之外，通过CSI控制字又扩展出一些其他的控制字: SWF、SDF、SDP、SSM、SHS、SVS、RCS、ACPS、ORN、SCR、TCC、SCS、ACS、PPA、XCS、MDF、CFS、SRC、GAA、GSM、PLD、PLU、CCC。</p>
-
-<p>在这些控制字中，有一些控制字没有被使用，有些则不是必须实现的: BEL、CAN、RS、CDC、WMM、MACRO、TIME、TCC、SCS、ACS、PPA、XCS、MDF、CFS、SRC、GAA、GSM、PLD、PLU、CCC。</p>
-
-<p>CC的控制字基本可以分为以下几类：</p>
-
-<ul>
-<li>Display Format：SWF、SDF、SDP、SSM、SHS、SVS</li>
-<li>Color：BKF、RDF、GRF、YLF、BLF、MGF、CNF、WHF、COL、RCS、POL</li>
-<li>Cursor Position：APB、APF、APD、APU、APR、APS、PAPF、ACPS</li>
-<li>Character Set：LS0、LS1、SS2、SS3、ESC</li>
-<li>Character Size：SSZ、MSZ、NSZ、SZX</li>
-<li>Display Effect：ORN、SCR、FLC、HLC、SPL、STL （可选）</li>
-<li>Clear Screen：CS</li>
-</ul>
-
-
-<h3>CC显示相关的控制字</h3>
-
-<ul>
-<li>SWF指定了Caption Plane的大小和Caption Text的Print Direction;</li>
-<li>SDF指定了Caption Display Window的size, Caption Display Window始终在Caption Plane内;</li>
-<li>SDP指定了Caption display window左上角的坐标，该坐标值是相对于Caption Plane的左上角坐标（0, 0）;</li>
-<li>根据SDF和SDP就可以确定Caption display window在Caption Plane内的位置及Size;</li>
-<li>SSM指定了Normal Font的Size;</li>
-<li>SHS指定了同一行字符之间的间隔;</li>
-<li>SVS指定了行与行之间的间隔;</li>
-</ul>
-
-
-<p>根据SSM、SHS、SVS可以知道每个字符所占Size, 不同字体大小的字符Size也不尽相同;</p>
-
-<p>上述的这些控制字一般在每个Caption Statement的开始都会出现，通过这些控制字，则可以推断出在Caption display window内所能够容纳的字符个数，即总的行数和每行可以显示字符的最大个数。</p>
-
-<h3>CC字符的颜色和背景色控制字</h3>
-
-<p>BKF、RDF、GRF、YLF、BLF、MGF、CNF、WHF这8个控制字指定字符的前景色(foreground color)，而字符的背景色(background color)和half foreground color及half background color均是通过COL控制字来指定。</p>
-
-<p>Closed Caption总共使用了128种颜色，这些控制字除了指定了color值，同时也指定了改color值在Color map table中Index的低4位（CMLA），而Color map table Index的高4位（Pallete Number）也由COL来指定（取值范围：0~7）。</p>
-
-<h3>CC字符显示位置的控制字</h3>
-
-<p>APB、APF、APD、APU、APR、APS、PAPF、ACPS控制了下一个字符在caption display window中插入的位置。</p>
-
-<p>APB、APF、APD、APU分别控制了当前Cursor向后、向前、向下、向上移动一个字符的位置；</p>
-
-<p>APR控制了字符的换行；</p>
-
-<p>APS控制了新的Caption起始的Cursor位置；</p>
-
-<p>PAPF跟有一个参数P1，控制了当前Cursor向前移动其参数P1指定的字符个数；</p>
-
-<p>ACPS指定了Cursor在Caption Plane中的绝对位置（字符的左下角坐标）。</p>
-
-<h3>CC字符集相关的控制字</h3>
-
-<p>LS0、LS1、SS2、SS3控制调用指明了的字符集（G0、G1、G2、G3）到GL或者GR中。</p>
-
-<ul>
-<li>LS0调用G0对应的字符集到GL中；</li>
-<li>LS1调用G1对应的字符集到GL中；</li>
-<li>SS2临时调用G2中的字符到GL中；</li>
-<li>SS3临时调用G3中的字符到GL中。</li>
-</ul>
-
-
-<p>除了C0中明确定义的这几个字符集控制字外，其他的字符集控制字则通过ESC控制字扩展来定义（LS2、LS3、LS1R、LS2R、LS3R）。</p>
-
-<p>ESC控制字除了上述用来扩展字符集调用命令控制字外，还可以用来指明G0、G1、G2、G3分别对应何种字符集。G0、G1、G2、G3、GL、GR的初始值在Spec中也指定了。</p>
-
-<h3>CC字符Font相关的控制字</h3>
-
-<p>SSZ、MSZ、NSZ、SZX用于控制了相对于SSM指定的Normal Font Size的字符大小。</p>
-
-<p>SSZ、MSZ、NSZ分别指定了字符的大小为samll、middle、normal。</p>
-
-<hr />
-
-<p>这两周一直在做日本DTVCC，不过这次不是从零开始，而是在之前巴西的DTVCC Decoder上增加对日本Closed Caption的支持，主要的工作集中在对日本字符集的支持上，最复杂的部分就是构建一个Kanji字符集（JIS X 213 : 2004）的Unicode映射表。</p>
-
-<p>JIS X 213 : 2004表见<a href="http://seiai.ed.jp/sys/text/cs/mcodes/jis0213table.html">这里</a>。</p>
-
-<h3>ISDB-T/SBTVD-T Closed Caption相关的Spec</h3>
-
-<ul>
-<li><p>ARIB STD-B24 VOL1 PART2 (Chapter 7: Character Coding): CC字符集；</p></li>
-<li><p>ARIB STD-B24 VOL1 PART3 (Coding of Caption and Superimpose): CC Data的syntax；</p></li>
-<li><p>ARIB STD-B24 VOL3 (Chapter 5: Independent PES): Independent PES的syntax；</p></li>
-<li><p>ARIB TR-B14 VOL3 Section2 (Chapter 4: Operation of caption and superimpose encoding): Closed Caption的显示；</p></li>
-<li><p>ABNT NBR 15606-1 (11.4 Character coding): 关于巴西Closed Caption在字符编码上的一些限制</p></li>
-<li><p>ABNT NBR 15608-3 (Chapter 5 / 14 / 22): 关于巴西Closed Caption在PMT及EIT上descriptor的定义和解释</p></li>
-</ul>
-
 ]]></content>
   </entry>
   
